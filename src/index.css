@@ -2,15 +2,17 @@
 
 @theme {
   /* Deep black, tilted a touch toward silver/grey. */
-  --color-ink: #0a0b0d;
-  --color-void: #030405;
+  --color-ink: #06070a;
+  --color-void: #020304;
   --color-silver-100: #f1f3f6;
   --color-silver-200: #d3d8de;
   --color-silver-300: #aeb4bc;
   --color-silver-400: #7f858d;
   --color-silver-500: #5a6068;
 
-  --font-display: "Instrument Serif", "Didot", "Times New Roman", serif;
+  /* Primary accent — a darkened Tempo Teal, used sparingly. */
+  --color-teal: #006570;
+
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 

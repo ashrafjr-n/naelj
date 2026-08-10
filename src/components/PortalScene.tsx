@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react"
 import { gsap, prefersReducedMotion, ScrollTrigger } from "../lib/gsap"
-import { N_FOCUS } from "../lib/n-mark"
-import NMark from "./NMark"
+import { MARK_FOCUS } from "../lib/mark-76"
+import Mark76 from "./Mark76"
 import still from "../assets/images/nael-2.png"
 
 const RAIL_BLOCKS = [132, 104, 156, 116, 140, 108, 128]
@@ -20,19 +20,19 @@ export default function PortalScene() {
       const q = self.selector!
 
       /**
-       * Every layer has to zoom about the same point in the scene — the middle
-       * of the N's upper notch — otherwise the move reads as a scale-up instead
+       * Every layer has to zoom about the same point in the scene — the
+       * counter of the 6 — otherwise the move reads as a scale-up instead
        * of a camera pushing forward. Origins are measured off layout, so they
        * survive a resize.
        */
       const alignOrigins = () => {
         const box = stage.current
         if (!box) return
-        const fx = box.offsetLeft + box.offsetWidth * N_FOCUS.x
-        const fy = box.offsetTop + box.offsetHeight * N_FOCUS.y
+        const fx = box.offsetLeft + box.offsetWidth * MARK_FOCUS.x
+        const fy = box.offsetTop + box.offsetHeight * MARK_FOCUS.y
 
         gsap.set(mark.current, {
-          transformOrigin: `${N_FOCUS.x * 100}% ${N_FOCUS.y * 100}%`,
+          transformOrigin: `${MARK_FOCUS.x * 100}% ${MARK_FOCUS.y * 100}%`,
         })
         for (const el of [scene.current, plate.current]) {
           if (!el) continue
@@ -77,7 +77,7 @@ export default function PortalScene() {
         .to(scene.current, { scale: 1.5, opacity: 0, ease: "power2.in", duration: 0.62 }, 0)
         .to(plate.current, { scale: 22, duration: 1 }, 0)
         .to(mark.current, { scale: 30, duration: 1, force3D: false }, 0)
-        // The silver surface slides out of the light as the camera passes it.
+        // The teal surface slides out of the light as the camera passes it.
         .to(mark.current, { opacity: 0, ease: "power1.in", duration: 0.36 }, 0.48)
         .to(backdrop.current, { opacity: 1, ease: "none", duration: 0.3 }, 0.5)
         .fromTo(
@@ -130,15 +130,15 @@ export default function PortalScene() {
       />
       <div ref={backdrop} className="pointer-events-none absolute inset-0 z-20 bg-void opacity-0" />
 
-      {/* Silver N, masked out of a silver plate. */}
+      {/* Teal 76, masked out of a teal plate. */}
       <div
         ref={stage}
-        className="pointer-events-none absolute top-1/2 left-1/2 z-30 aspect-[84/100] h-[54vh] -translate-x-1/2 -translate-y-1/2"
+        className="pointer-events-none absolute top-1/2 left-1/2 z-30 aspect-[182/100] h-[46vh] -translate-x-1/2 -translate-y-1/2"
       >
-        <NMark svgRef={mark} />
+        <Mark76 svgRef={mark} />
       </div>
 
-      {/* Behind the N — content to be decided. */}
+      {/* Behind the 76 — content to be decided. */}
       <div
         ref={inside}
         className="pointer-events-none absolute inset-0 z-40 flex flex-col items-center justify-center gap-7 opacity-0"

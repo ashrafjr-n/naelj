@@ -60,7 +60,7 @@ export default function Hero() {
 
       <div className="relative z-10 flex h-full items-center">
         <div data-copy className="pl-[8vw] will-change-transform">
-          <h1 className="font-display text-[clamp(3.6rem,6.4vw,7rem)] tracking-[-0.022em]">
+          <h1 className="font-sans text-[clamp(3.6rem,6.4vw,7rem)] tracking-[-0.022em]">
             {["Nael Ahmad", "Al-Jarabah"].map((line, i) => (
               <span
                 key={line}
