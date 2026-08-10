@@ -40,7 +40,7 @@ export default function Hero() {
   return (
     <section ref={root} className="relative h-screen w-full">
       {/* Portrait — perfectly square, static, bleeding off the top-right. */}
-      <div className="mask-hero-portrait absolute top-0 right-0 aspect-square w-[min(46vw,81vh)]">
+      <div className="absolute top-0 right-0 aspect-square w-[min(46vw,81vh)]">
         <img
           src={portrait}
           alt="Nael Ahmad Al-Jarabah"

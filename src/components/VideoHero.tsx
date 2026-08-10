@@ -9,8 +9,8 @@ export default function VideoHero() {
   const [inView, setInView] = useState(false)
   const [muted, setMuted] = useState(true)
 
-  // Lazy-load: only mount (and therefore fetch) the video once the section
-  // is in or nearing the viewport.
+  // Lazy-load once the section is in or nearing the viewport, then keep the
+  // video (and its sound) paused while scrolled away and resumed on return.
   useEffect(() => {
     const el = root.current
     if (!el) return
@@ -19,7 +19,9 @@ export default function VideoHero() {
       ([entry]) => {
         if (entry.isIntersecting) {
           setInView(true)
-          observer.disconnect()
+          video.current?.play().catch(() => {})
+        } else {
+          video.current?.pause()
         }
       },
       { rootMargin: "200px 0px" },
