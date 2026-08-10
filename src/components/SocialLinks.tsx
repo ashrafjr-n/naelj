@@ -20,7 +20,7 @@ export default function SocialLinks() {
             rel="noreferrer"
             aria-label={label}
             title={label}
-            className="group/social flex size-11 items-center justify-center rounded-full border border-white/10 text-silver-400 transition-[color,border-color,background-color,transform] duration-500 ease-out hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/[0.04] hover:text-silver-100"
+            className="group/social flex size-11 items-center justify-center rounded-full border border-white/10 text-silver-400 transition-colors duration-500 ease-out hover:text-teal"
           >
             <Icon size={15} strokeWidth={1.25} />
           </a>

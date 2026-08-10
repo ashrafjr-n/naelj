@@ -20,10 +20,10 @@ export default function PortalScene() {
       const q = self.selector!
 
       /**
-       * Every layer has to zoom about the same point in the scene — the
-       * counter of the 6 — otherwise the move reads as a scale-up instead
-       * of a camera pushing forward. Origins are measured off layout, so they
-       * survive a resize.
+       * Every layer has to zoom about the same point in the scene — the gap
+       * between the 7 and the 6 — otherwise the move reads as a scale-up
+       * instead of a camera pushing forward. Origins are measured off
+       * layout, so they survive a resize.
        */
       const alignOrigins = () => {
         const box = stage.current

@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  /* Deep black, tilted a touch toward silver/grey. */
-  --color-ink: #06070a;
-  --color-void: #020304;
+  /* Near-black, neutral — no colour cast, just the faintest grey. */
+  --color-ink: #050505;
+  --color-void: #010101;
   --color-silver-100: #f1f3f6;
   --color-silver-200: #d3d8de;
   --color-silver-300: #aeb4bc;

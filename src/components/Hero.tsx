@@ -67,7 +67,7 @@ export default function Hero() {
                 data-line
                 className={`block overflow-hidden leading-[1.06] ${i > 0 ? "-mt-[0.16em]" : ""}`}
               >
-                <span className="block bg-gradient-to-b from-silver-100 via-silver-200 to-silver-400 bg-clip-text text-transparent">
+                <span className="block bg-gradient-to-b from-silver-200 via-silver-300 to-silver-500 bg-clip-text text-transparent">
                   {line}
                 </span>
               </span>
@@ -76,7 +76,7 @@ export default function Hero() {
 
           <div data-fade className="mt-9 flex items-center gap-5">
             <span className="h-px w-12 bg-white/20" />
-            <p className="text-[0.68rem] font-normal tracking-[0.42em] text-silver-400 uppercase">
+            <p className="text-[0.68rem] font-normal tracking-[0.42em] text-teal uppercase">
               Screenwriter · Director
             </p>
           </div>
