@@ -16,7 +16,6 @@ export default function Hero() {
           .timeline({ defaults: { ease: "expo.out" } })
           .from(q("[data-line] > span"), { yPercent: 118, duration: 1.6, stagger: 0.11 })
           .from(q("[data-fade]"), { opacity: 0, y: 16, duration: 1.4, stagger: 0.14 }, 0.55)
-          .from(q("[data-portrait]"), { opacity: 0, scale: 1.06, duration: 2.2 }, 0)
       }
 
       // Scroll-linked drift: the hero recedes rather than ending, so the scene
@@ -28,12 +27,6 @@ export default function Hero() {
         scrub: true,
       }
       gsap.to(q("[data-copy]"), { y: -84, opacity: 0.18, ease: "none", scrollTrigger: scrub })
-      gsap.to(q("[data-portrait]"), {
-        yPercent: 6,
-        scale: 1.04,
-        ease: "none",
-        scrollTrigger: scrub,
-      })
       gsap.to(q("[data-cue]"), {
         opacity: 0,
         ease: "none",
@@ -46,11 +39,8 @@ export default function Hero() {
 
   return (
     <section ref={root} className="relative h-screen w-full">
-      {/* Portrait — perfectly square, ~half the viewport, bleeding off the top-right. */}
-      <div
-        data-portrait
-        className="mask-hero-portrait absolute top-0 right-0 aspect-square w-[min(50vw,88vh)] will-change-transform"
-      >
+      {/* Portrait — perfectly square, static, bleeding off the top-right. */}
+      <div className="mask-hero-portrait absolute top-0 right-0 aspect-square w-[min(46vw,81vh)]">
         <img
           src={portrait}
           alt="Nael Ahmad Al-Jarabah"
