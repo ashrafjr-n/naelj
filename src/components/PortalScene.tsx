@@ -96,7 +96,7 @@ export default function PortalScene() {
   return (
     <section
       ref={root}
-      className="relative h-screen w-full overflow-hidden pt-[var(--header-h)]"
+      className="relative h-screen w-full overflow-hidden bg-void pt-[var(--header-h)]"
     >
       <div ref={scene} className="absolute inset-0 z-10 will-change-transform">
         {/* Second portrait — desaturated down into the same darkness. */}
@@ -146,13 +146,6 @@ export default function PortalScene() {
         ref={inside}
         className="pointer-events-none absolute inset-0 z-40 flex flex-col items-center justify-center gap-7 opacity-0"
       >
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage:
-              "radial-gradient(900px 600px at 50% 50%, rgba(190,200,214,0.04), transparent 100%)",
-          }}
-        />
         <span className="h-px w-14 bg-white/15" />
         <p className="text-[0.62rem] tracking-[0.52em] text-silver-400 uppercase">
           Something new is being written

@@ -61,7 +61,7 @@ export default function Hero() {
   }, [])
 
   return (
-    <section ref={root} className="relative h-screen w-full pt-[var(--header-h)]">
+    <section ref={root} className="relative h-screen w-full bg-void pt-[var(--header-h)]">
       {/* Portrait — perfectly square, vertically centered on the copy block, static once its intro settles. */}
       <div
         ref={portraitBox}

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { Volume2, VolumeX } from "lucide-react"
+import { ScrollTrigger } from "../lib/gsap"
 import heroVideo from "../assets/videos/hero.webm"
 
 export default function VideoHero() {
@@ -27,6 +28,26 @@ export default function VideoHero() {
     )
     observer.observe(el)
     return () => observer.disconnect()
+  }, [])
+
+  // Stop earlier than "scrolled out of view": once the reader is 70% through
+  // the section right after this one, the video has no reason to keep
+  // running underneath. The intersection observer above still covers full
+  // scroll-away/back-into-view as a complementary fallback.
+  useEffect(() => {
+    const nextSection = root.current?.nextElementSibling as HTMLElement | null
+    if (!nextSection) return
+
+    const trigger = ScrollTrigger.create({
+      trigger: nextSection,
+      start: "top top",
+      end: "bottom top",
+      onUpdate: (self) => {
+        if (self.progress >= 0.7) video.current?.pause()
+      },
+    })
+
+    return () => trigger.kill()
   }, [])
 
   // Browsers block autoplay-with-sound, so try unmuted first and fall back
@@ -70,7 +91,7 @@ export default function VideoHero() {
   return (
     <section
       ref={root}
-      className="relative h-screen w-full overflow-hidden bg-ink pt-[var(--header-h)]"
+      className="relative h-screen w-full overflow-hidden bg-void pt-[var(--header-h)]"
     >
       {inView && (
         <video

@@ -1,10 +1,11 @@
 @import "tailwindcss";
 
 @theme {
-  /* Near-black, neutral — no colour cast, just the faintest grey. Kept close
-     to true black so the video hero's own dark footage doesn't seam against
-     the flat background colour used everywhere else. */
-  --color-ink: #020202;
+  /* One flat, true-black background shared by every section — same token,
+     same value, so there is no seam between the video hero and the rest of
+     the page (or anywhere else). --color-ink is kept as a separate name for
+     non-background uses (e.g. selection text colour). */
+  --color-ink: #000000;
   --color-void: #000000;
   --color-silver-100: #f1f3f6;
   --color-silver-200: #d3d8de;
