@@ -36,7 +36,7 @@ vite.config.ts         Vite config (react + tailwindcss plugins)
 - `npm run lint` — run oxlint
 
 ## Notes
-
+ 
 - No router, state library or UI kit is installed — the site is a single page.
 - Styling is Tailwind utility classes directly in JSX; no CSS modules or separate per-component stylesheets. The only shared CSS lives in `src/index.css` (theme tokens plus a few gradient-mask utilities that are too long to inline).
 - Desktop-only so far: no mobile/tablet breakpoints have been designed.
