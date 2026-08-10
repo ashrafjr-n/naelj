@@ -4,6 +4,9 @@ import ContactButton from "./ContactButton"
 import SocialLinks from "./SocialLinks"
 import portrait from "../assets/images/nael.png"
 
+// Short factual details shown under the contact row — append more here later.
+const EXPERIENCE_DETAILS = ["Experience since 1999."]
+
 export default function Hero() {
   const root = useRef<HTMLElement>(null)
   const copy = useRef<HTMLDivElement>(null)
@@ -58,12 +61,12 @@ export default function Hero() {
   }, [])
 
   return (
-    <section ref={root} className="relative h-screen w-full">
+    <section ref={root} className="relative h-screen w-full pt-[var(--header-h)]">
       {/* Portrait — perfectly square, vertically centered on the copy block, static once its intro settles. */}
       <div
         ref={portraitBox}
         data-portrait
-        className="absolute top-0 right-0 aspect-square w-[min(46vw,81vh)] overflow-hidden rounded-2xl will-change-transform"
+        className="absolute top-0 right-[3vw] aspect-square w-[min(42vw,75vh)] overflow-hidden rounded-2xl will-change-transform"
       >
         <img
           src={portrait}
@@ -97,13 +100,14 @@ export default function Hero() {
             </p>
           </div>
 
-          <div data-fade className="mt-14">
+          <div data-fade className="mt-14 flex items-center gap-6">
             <ContactButton href="mailto:hello@example.com" />
-          </div>
-
-          <div data-fade className="mt-12">
             <SocialLinks />
           </div>
+
+          <p data-fade className="mt-6 text-[0.6rem] tracking-[0.1em] text-silver-500">
+            {EXPERIENCE_DETAILS.join(" · ")}
+          </p>
         </div>
       </div>
     </section>

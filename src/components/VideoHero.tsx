@@ -68,7 +68,10 @@ export default function VideoHero() {
   }
 
   return (
-    <section ref={root} className="relative h-screen w-full overflow-hidden bg-ink">
+    <section
+      ref={root}
+      className="relative h-screen w-full overflow-hidden bg-ink pt-[var(--header-h)]"
+    >
       {inView && (
         <video
           ref={video}

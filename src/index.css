@@ -1,9 +1,11 @@
 @import "tailwindcss";
 
 @theme {
-  /* Near-black, neutral — no colour cast, just the faintest grey. */
-  --color-ink: #050505;
-  --color-void: #010101;
+  /* Near-black, neutral — no colour cast, just the faintest grey. Kept close
+     to true black so the video hero's own dark footage doesn't seam against
+     the flat background colour used everywhere else. */
+  --color-ink: #020202;
+  --color-void: #000000;
   --color-silver-100: #f1f3f6;
   --color-silver-200: #d3d8de;
   --color-silver-300: #aeb4bc;
@@ -18,6 +20,9 @@
 
 @layer base {
   html {
+    /* Matches the fixed header's rendered height, so sections can reserve
+       top padding under it without hardcoding the number in three places. */
+    --header-h: 78px;
     background-color: var(--color-ink);
     color-scheme: dark;
   }

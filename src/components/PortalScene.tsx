@@ -94,12 +94,15 @@ export default function PortalScene() {
   }, [])
 
   return (
-    <section ref={root} className="relative h-screen w-full overflow-hidden">
+    <section
+      ref={root}
+      className="relative h-screen w-full overflow-hidden pt-[var(--header-h)]"
+    >
       <div ref={scene} className="absolute inset-0 z-10 will-change-transform">
         {/* Second portrait — desaturated down into the same darkness. */}
         <div
           data-approach
-          className="mask-still absolute bottom-0 -left-[5vw] w-[36vw] opacity-[0.72]"
+          className="mask-still absolute bottom-0 -left-[5vw] w-[32vw] opacity-[0.72]"
         >
           <img
             src={still}
