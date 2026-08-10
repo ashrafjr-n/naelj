@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useLayoutEffect, useRef } from "react"
 import { ArrowDown, ArrowUpRight } from "lucide-react"
 import { gsap, prefersReducedMotion } from "../lib/gsap"
 import SocialLinks from "./SocialLinks"
@@ -6,6 +6,30 @@ import portrait from "../assets/images/nael.png"
 
 export default function Hero() {
   const root = useRef<HTMLElement>(null)
+  const copy = useRef<HTMLDivElement>(null)
+  const portraitBox = useRef<HTMLDivElement>(null)
+
+  // Center the portrait on the text column's actual measured height, not the
+  // raw viewport — recomputed on resize and once webfonts land, since the
+  // clamp()'d headline changes the column's height.
+  useLayoutEffect(() => {
+    const alignPortrait = () => {
+      const section = root.current
+      const copyEl = copy.current
+      const portraitEl = portraitBox.current
+      if (!section || !copyEl || !portraitEl) return
+
+      const sectionRect = section.getBoundingClientRect()
+      const copyRect = copyEl.getBoundingClientRect()
+      const centerY = copyRect.top - sectionRect.top + copyRect.height / 2
+      portraitEl.style.top = `${centerY - portraitEl.getBoundingClientRect().height / 2}px`
+    }
+
+    alignPortrait()
+    window.addEventListener("resize", alignPortrait)
+    document.fonts?.ready.then(alignPortrait).catch(() => {})
+    return () => window.removeEventListener("resize", alignPortrait)
+  }, [])
 
   useEffect(() => {
     const ctx = gsap.context((self) => {
@@ -16,6 +40,7 @@ export default function Hero() {
           .timeline({ defaults: { ease: "expo.out" } })
           .from(q("[data-line] > span"), { yPercent: 118, duration: 1.6, stagger: 0.11 })
           .from(q("[data-fade]"), { opacity: 0, y: 16, duration: 1.4, stagger: 0.14 }, 0.55)
+          .from(q("[data-portrait]"), { opacity: 0, scale: 1.02, duration: 2.2 }, 0.15)
       }
 
       // Scroll-linked drift: the hero recedes rather than ending, so the scene
@@ -39,17 +64,23 @@ export default function Hero() {
 
   return (
     <section ref={root} className="relative h-screen w-full">
-      {/* Portrait — perfectly square, static, bleeding off the top-right. */}
-      <div className="absolute top-0 right-0 aspect-square w-[min(46vw,81vh)]">
+      {/* Portrait — perfectly square, vertically centered on the copy block, static once its intro settles. */}
+      <div
+        ref={portraitBox}
+        data-portrait
+        className="absolute top-0 right-0 aspect-square w-[min(46vw,81vh)] will-change-transform"
+      >
         <img
           src={portrait}
           alt="Nael Ahmad Al-Jarabah"
           className="size-full object-cover object-[54%_center] contrast-[1.04] saturate-[0.82]"
         />
+        {/* Soft seam separating the portrait from the text column — depth, not a hard edge. */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-[6%] bg-gradient-to-r from-black/25 to-transparent" />
       </div>
 
       <div className="relative z-10 flex h-full items-center">
-        <div data-copy className="pl-[8vw] will-change-transform">
+        <div ref={copy} data-copy className="pl-[8vw] will-change-transform">
           <h1 className="font-sans text-[clamp(3.6rem,6.4vw,7rem)] tracking-[-0.022em]">
             {["Nael Ahmad", "Al-Jarabah"].map((line, i) => (
               <span
@@ -80,7 +111,7 @@ export default function Hero() {
               <ArrowUpRight
                 size={15}
                 strokeWidth={1.5}
-                className="transition-transform duration-500 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                className="transition-transform duration-300 ease-out group-hover:translate-x-1 group-hover:-translate-y-1"
               />
             </a>
           </div>
@@ -93,7 +124,7 @@ export default function Hero() {
 
       <div
         data-cue
-        className="absolute bottom-12 left-[8vw] z-10 flex items-center gap-3 text-silver-500"
+        className="absolute bottom-12 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3 text-silver-500"
       >
         <ArrowDown size={13} strokeWidth={1.25} />
         <span className="text-[0.6rem] tracking-[0.4em] uppercase">Scroll</span>
