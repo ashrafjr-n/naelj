@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react"
 import { Volume2, VolumeX } from "lucide-react"
-import Header from "./Header"
 import heroVideo from "../assets/videos/hero.webm"
 
 export default function VideoHero() {
@@ -81,7 +80,6 @@ export default function VideoHero() {
         />
       )}
       <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/70" />
-      <Header />
 
       <button
         type="button"

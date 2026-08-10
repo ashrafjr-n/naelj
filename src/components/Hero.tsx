@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef } from "react"
-import { ArrowDown, ArrowUpRight } from "lucide-react"
 import { gsap, prefersReducedMotion } from "../lib/gsap"
+import ContactButton from "./ContactButton"
 import SocialLinks from "./SocialLinks"
 import portrait from "../assets/images/nael.png"
 
@@ -52,11 +52,6 @@ export default function Hero() {
         scrub: true,
       }
       gsap.to(q("[data-copy]"), { y: -84, opacity: 0.18, ease: "none", scrollTrigger: scrub })
-      gsap.to(q("[data-cue]"), {
-        opacity: 0,
-        ease: "none",
-        scrollTrigger: { ...scrub, end: "18% top" },
-      })
     }, root)
 
     return () => ctx.revert()
@@ -68,7 +63,7 @@ export default function Hero() {
       <div
         ref={portraitBox}
         data-portrait
-        className="absolute top-0 right-0 aspect-square w-[min(46vw,81vh)] will-change-transform"
+        className="absolute top-0 right-0 aspect-square w-[min(46vw,81vh)] overflow-hidden rounded-2xl will-change-transform"
       >
         <img
           src={portrait}
@@ -103,31 +98,13 @@ export default function Hero() {
           </div>
 
           <div data-fade className="mt-14">
-            <a
-              href="mailto:hello@example.com"
-              className="group inline-flex items-center gap-4 rounded-full border border-white/15 py-4 pr-5 pl-8 text-[0.66rem] tracking-[0.3em] text-silver-200 uppercase transition-colors duration-500 ease-out hover:border-white/70 hover:bg-silver-100 hover:text-ink"
-            >
-              Contact Now
-              <ArrowUpRight
-                size={15}
-                strokeWidth={1.5}
-                className="transition-transform duration-300 ease-out group-hover:translate-x-1 group-hover:-translate-y-1"
-              />
-            </a>
+            <ContactButton href="mailto:hello@example.com" />
           </div>
 
           <div data-fade className="mt-12">
             <SocialLinks />
           </div>
         </div>
-      </div>
-
-      <div
-        data-cue
-        className="absolute bottom-12 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3 text-silver-500"
-      >
-        <ArrowDown size={13} strokeWidth={1.25} />
-        <span className="text-[0.6rem] tracking-[0.4em] uppercase">Scroll</span>
       </div>
     </section>
   )
