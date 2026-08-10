@@ -7,7 +7,7 @@ const NAV_LINKS = [
 
 export default function Header() {
   return (
-    <header className="fixed inset-x-0 top-0 z-50 flex items-center justify-between bg-ink/35 px-[6vw] py-6 backdrop-blur-md">
+    <header className="fixed inset-x-0 top-0 z-50 flex items-center justify-between bg-ink/35 px-[6vw] py-4 backdrop-blur-md">
       <a href="#home" className="text-[0.78rem] tracking-[0.32em] text-silver-100 uppercase">
         Nael Ahmad
       </a>
