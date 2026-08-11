@@ -4,24 +4,23 @@ import { MARK_FOCUS } from "../lib/mark-76"
 import Mark76 from "./Mark76"
 import AccordionGallery, { type AccordionGalleryItem } from "./AccordionGallery"
 import still from "../assets/images/nael-2.png"
+import aboutMeImage from "../assets/images/nael-2.png"
+import writerImage from "../assets/images/writer.jpg"
+import animationImage from "../assets/images/nael-2.png"
+import campaignsImage from "../assets/images/campaigns.jpeg"
+import aiArtistImage from "../assets/images/ai.png"
+import workshopsImage from "../assets/images/workshops.jpg"
 
 const RAIL_BLOCKS = [132, 104, 156, 116, 140, 108, 128]
 
-// One placeholder gradient per panel — on-brand (teal/void) and dependency-free,
-// standing in until real work images are swapped in per item.
-const placeholderImage = (from: string, to: string) =>
-  `data:image/svg+xml,${encodeURIComponent(
-    `<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1200"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${from}"/><stop offset="100%" stop-color="${to}"/></linearGradient></defs><rect width="900" height="1200" fill="url(#g)"/></svg>`,
-  )}`
-
 // Mirrors Header.tsx's NAV_LINKS, minus "Home" — same labels, same targets.
 const GALLERY_ITEMS: AccordionGalleryItem[] = [
-  { image: placeholderImage("#0d2a2d", "#000000"), label: "About Me", link: "/about" },
-  { image: placeholderImage("#0f3438", "#000000"), label: "Writer", link: "/#writer" },
-  { image: placeholderImage("#006570", "#00171a"), label: "Animation", link: "/#animation" },
-  { image: placeholderImage("#123c40", "#000000"), label: "Campaigns", link: "/#campaigns" },
-  { image: placeholderImage("#0a2427", "#000000"), label: "AI Artist", link: "/#ai-artist" },
-  { image: placeholderImage("#144a4f", "#000000"), label: "Workshops", link: "/#workshops" },
+  { image: aboutMeImage, label: "About Me", link: "/about" },
+  { image: writerImage, label: "Writer", link: "/#writer" },
+  { image: animationImage, label: "Animation", link: "/#animation" },
+  { image: campaignsImage, label: "Campaigns", link: "/#campaigns" },
+  { image: aiArtistImage, label: "AI Artist", link: "/#ai-artist" },
+  { image: workshopsImage, label: "Workshops", link: "/#workshops" },
 ]
 
 export default function PortalScene() {
