@@ -9,8 +9,9 @@ export default function VideoHero() {
   const [inView, setInView] = useState(false)
   const [muted, setMuted] = useState(true)
 
-  // Lazy-load once the section is in or nearing the viewport, then keep the
-  // video (and its sound) paused while scrolled away and resumed on return.
+  // Lazy-load once the section is in or nearing the viewport. Scroll-driven
+  // playback is owned entirely by the effect below; this only re-triggers
+  // play() if the reader scrolls back up to the top after leaving.
   useEffect(() => {
     const el = root.current
     if (!el) return
@@ -20,8 +21,6 @@ export default function VideoHero() {
         if (entry.isIntersecting) {
           setInView(true)
           video.current?.play().catch(() => {})
-        } else {
-          video.current?.pause()
         }
       },
       { rootMargin: "200px 0px" },
@@ -30,10 +29,11 @@ export default function VideoHero() {
     return () => observer.disconnect()
   }, [])
 
-  // Stop earlier than "scrolled out of view": once the reader is 70% through
-  // the section right after this one, the video has no reason to keep
-  // running underneath. The intersection observer above still covers full
-  // scroll-away/back-into-view as a complementary fallback.
+  // Sole authority over scroll-driven playback: paused once the reader is
+  // 70% through the section right after this one, resumed above that point.
+  // Bidirectional so it stays the only thing deciding play state past
+  // mount — a second independent pause call (previously in the observer
+  // above) was firing far earlier than 70% with nothing to resume it.
   useEffect(() => {
     const nextSection = root.current?.nextElementSibling as HTMLElement | null
     if (!nextSection) return
@@ -43,7 +43,13 @@ export default function VideoHero() {
       start: "top top",
       end: "bottom top",
       onUpdate: (self) => {
-        if (self.progress >= 0.7) video.current?.pause()
+        const v = video.current
+        if (!v) return
+        if (self.progress >= 0.7) {
+          if (!v.paused) v.pause()
+        } else if (v.paused) {
+          v.play().catch(() => {})
+        }
       },
     })
 

@@ -1,13 +1,5 @@
-import {
-  useRef,
-  useEffect,
-  useState,
-  useCallback,
-  CSSProperties,
-  ElementType,
-  KeyboardEvent,
-  MouseEvent,
-} from "react"
+import { useRef, useEffect, useState, useCallback } from "react"
+import type { CSSProperties, ElementType, KeyboardEvent, MouseEvent } from "react"
 import { Link } from "react-router-dom"
 import { gsap } from "gsap"
 

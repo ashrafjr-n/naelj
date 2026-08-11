@@ -1,12 +1,10 @@
-/**
- * Geometry of the bold geometric "76" used as the portal.
- *
- * Two digits, each 84×100, separated by a 14-wide gap. The 7 is built from
- * straight H/V/L segments; the 6 is the real "6" glyph outline from Futura
- * Bold (a bold geometric sans), extracted with fontTools and rescaled to
- * fit its 84×100 box, offset +98 into the combined box — so it reads as an
- * actual digit rather than a hand-built approximation.
- */
+// Geometry of the bold geometric "76" used as the portal.
+//
+// Two digits, each 84×100, separated by a 14-wide gap. The 7 is built from
+// straight H/V/L segments; the 6 is the real "6" glyph outline from Futura
+// Bold (a bold geometric sans), extracted with fontTools and rescaled to
+// fit its 84×100 box, offset +98 into the combined box — so it reads as an
+// actual digit rather than a hand-built approximation.
 const DIGIT_WIDTH = 84
 const GAP_WIDTH = 14
 
@@ -24,11 +22,9 @@ const SIX_HOLE =
 
 export const MARK_PATH = `${SEVEN_PATH} ${SIX_PATH} ${SIX_HOLE}`
 
-/**
- * The gap between the two digit boxes, horizontally and vertically centered
- * — the negative space the camera flies through. Every zooming layer shares
- * it as its transform origin.
- */
+// The gap between the two digit boxes, horizontally and vertically centered
+// — the negative space the camera flies through. Every zooming layer shares
+// it as its transform origin.
 export const MARK_FOCUS = {
   x: (DIGIT_WIDTH + GAP_WIDTH / 2) / MARK_VIEWBOX.width,
   y: 0.5,

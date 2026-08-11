@@ -4,9 +4,7 @@ import { MARK_FOCUS } from "../lib/mark-76"
 import Mark76 from "./Mark76"
 import AccordionGallery, { type AccordionGalleryItem } from "./AccordionGallery"
 import still from "../assets/images/nael-2.png"
-import aboutMeImage from "../assets/images/nael-2.png"
 import writerImage from "../assets/images/writer.jpg"
-import animationImage from "../assets/images/nael-2.png"
 import campaignsImage from "../assets/images/campaigns.jpeg"
 import aiArtistImage from "../assets/images/ai.png"
 import workshopsImage from "../assets/images/workshops.jpg"
@@ -14,10 +12,11 @@ import workshopsImage from "../assets/images/workshops.jpg"
 const RAIL_BLOCKS = [132, 104, 156, 116, 140, 108, 128]
 
 // Mirrors Header.tsx's NAV_LINKS, minus "Home" — same labels, same targets.
+// About Me and Animation share the same portrait as the "on set" still below.
 const GALLERY_ITEMS: AccordionGalleryItem[] = [
-  { image: aboutMeImage, label: "About Me", link: "/about" },
+  { image: still, label: "About Me", link: "/about" },
   { image: writerImage, label: "Writer", link: "/#writer" },
-  { image: animationImage, label: "Animation", link: "/#animation" },
+  { image: still, label: "Animation", link: "/#animation" },
   { image: campaignsImage, label: "Campaigns", link: "/#campaigns" },
   { image: aiArtistImage, label: "AI Artist", link: "/#ai-artist" },
   { image: workshopsImage, label: "Workshops", link: "/#workshops" },
@@ -57,12 +56,10 @@ export default function PortalScene() {
     const ctx = gsap.context((self) => {
       const q = self.selector!
 
-      /**
-       * Every layer has to zoom about the same point in the scene — the gap
-       * between the 7 and the 6 — otherwise the move reads as a scale-up
-       * instead of a camera pushing forward. Origins are measured off
-       * layout, so they survive a resize.
-       */
+      // Every layer has to zoom about the same point in the scene — the gap
+      // between the 7 and the 6 — otherwise the move reads as a scale-up
+      // instead of a camera pushing forward. Origins are measured off
+      // layout, so they survive a resize.
       const alignOrigins = () => {
         const box = stage.current
         if (!box) return
