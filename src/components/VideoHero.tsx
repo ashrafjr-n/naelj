@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react"
 import { Volume2, VolumeX } from "lucide-react"
-import { ScrollTrigger } from "../lib/gsap"
 import heroVideo from "../assets/videos/hero.webm"
 
 export default function VideoHero() {
@@ -9,9 +8,8 @@ export default function VideoHero() {
   const [inView, setInView] = useState(false)
   const [muted, setMuted] = useState(true)
 
-  // Lazy-load once the section is in or nearing the viewport. Scroll-driven
-  // playback is owned entirely by the effect below; this only re-triggers
-  // play() if the reader scrolls back up to the top after leaving.
+  // Lazy-load once the section is in or nearing the viewport, then keep the
+  // video (and its sound) paused while scrolled away and resumed on return.
   useEffect(() => {
     const el = root.current
     if (!el) return
@@ -21,6 +19,8 @@ export default function VideoHero() {
         if (entry.isIntersecting) {
           setInView(true)
           video.current?.play().catch(() => {})
+        } else {
+          video.current?.pause()
         }
       },
       { rootMargin: "200px 0px" },
@@ -29,31 +29,21 @@ export default function VideoHero() {
     return () => observer.disconnect()
   }, [])
 
-  // Sole authority over scroll-driven playback: paused once the reader is
-  // 70% through the section right after this one, resumed above that point.
-  // Bidirectional so it stays the only thing deciding play state past
-  // mount — a second independent pause call (previously in the observer
-  // above) was firing far earlier than 70% with nothing to resume it.
+  // Stop as soon as the section right after this one (the portrait section)
+  // is ~70% visible while scrolling into it — i.e. right around when the
+  // portrait itself appears — rather than partway through scrolling past it.
   useEffect(() => {
     const nextSection = root.current?.nextElementSibling as HTMLElement | null
     if (!nextSection) return
 
-    const trigger = ScrollTrigger.create({
-      trigger: nextSection,
-      start: "top top",
-      end: "bottom top",
-      onUpdate: (self) => {
-        const v = video.current
-        if (!v) return
-        if (self.progress >= 0.7) {
-          if (!v.paused) v.pause()
-        } else if (v.paused) {
-          v.play().catch(() => {})
-        }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.intersectionRatio >= 0.7) video.current?.pause()
       },
-    })
-
-    return () => trigger.kill()
+      { threshold: 0.7 },
+    )
+    observer.observe(nextSection)
+    return () => observer.disconnect()
   }, [])
 
   // Browsers block autoplay-with-sound, so try unmuted first and fall back
