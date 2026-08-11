@@ -3,6 +3,11 @@ import ContactButton from "./ContactButton"
 const NAV_LINKS = [
   { label: "Home", href: "#home" },
   { label: "About Me", href: "#about" },
+  { label: "Writer", href: "#writer" },
+  { label: "Animation", href: "#animation" },
+  { label: "Campaigns", href: "#campaigns" },
+  { label: "AI Artist", href: "#ai-artist" },
+  { label: "Workshops", href: "#workshops" },
 ]
 
 export default function Header() {
@@ -13,7 +18,7 @@ export default function Header() {
       </a>
 
       <nav>
-        <ul className="flex items-center gap-10">
+        <ul className="flex items-center gap-6">
           {NAV_LINKS.map(({ label, href }) => (
             <li key={label}>
               <a
