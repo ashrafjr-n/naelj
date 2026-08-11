@@ -1,10 +1,28 @@
-import { useLayoutEffect, useRef } from "react"
+import { useLayoutEffect, useRef, useState } from "react"
 import { gsap, prefersReducedMotion, ScrollTrigger } from "../lib/gsap"
 import { MARK_FOCUS } from "../lib/mark-76"
 import Mark76 from "./Mark76"
+import AccordionGallery, { type AccordionGalleryItem } from "./AccordionGallery"
 import still from "../assets/images/nael-2.png"
 
 const RAIL_BLOCKS = [132, 104, 156, 116, 140, 108, 128]
+
+// One placeholder gradient per panel — on-brand (teal/void) and dependency-free,
+// standing in until real work images are swapped in per item.
+const placeholderImage = (from: string, to: string) =>
+  `data:image/svg+xml,${encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1200"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${from}"/><stop offset="100%" stop-color="${to}"/></linearGradient></defs><rect width="900" height="1200" fill="url(#g)"/></svg>`,
+  )}`
+
+// Mirrors Header.tsx's NAV_LINKS, minus "Home" — same labels, same targets.
+const GALLERY_ITEMS: AccordionGalleryItem[] = [
+  { image: placeholderImage("#0d2a2d", "#000000"), label: "About Me", link: "/about" },
+  { image: placeholderImage("#0f3438", "#000000"), label: "Writer", link: "/#writer" },
+  { image: placeholderImage("#006570", "#00171a"), label: "Animation", link: "/#animation" },
+  { image: placeholderImage("#123c40", "#000000"), label: "Campaigns", link: "/#campaigns" },
+  { image: placeholderImage("#0a2427", "#000000"), label: "AI Artist", link: "/#ai-artist" },
+  { image: placeholderImage("#144a4f", "#000000"), label: "Workshops", link: "/#workshops" },
+]
 
 export default function PortalScene() {
   const root = useRef<HTMLElement>(null)
@@ -14,6 +32,27 @@ export default function PortalScene() {
   const plate = useRef<HTMLDivElement>(null)
   const backdrop = useRef<HTMLDivElement>(null)
   const inside = useRef<HTMLDivElement>(null)
+
+  // Gallery height tracks the section's own rendered height (h-screen) minus
+  // the fixed header and breathing room, so it fills the section the same
+  // way every other Home section fills its viewport.
+  const [galleryHeight, setGalleryHeight] = useState(560)
+
+  useLayoutEffect(() => {
+    const section = root.current
+    if (!section) return
+
+    const measure = () => {
+      const headerH =
+        parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--header-h")) || 0
+      setGalleryHeight(Math.max(320, section.clientHeight - headerH - 120))
+    }
+
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(section)
+    return () => ro.disconnect()
+  }, [])
 
   useLayoutEffect(() => {
     const ctx = gsap.context((self) => {
@@ -141,15 +180,33 @@ export default function PortalScene() {
         <Mark76 svgRef={mark} />
       </div>
 
-      {/* Behind the 76 — content to be decided. */}
+      {/* Behind the 76 — what the camera arrives at. */}
       <div
         ref={inside}
-        className="pointer-events-none absolute inset-0 z-40 flex flex-col items-center justify-center gap-7 opacity-0"
+        className="pointer-events-none absolute inset-0 z-40 flex flex-col items-center justify-center opacity-0"
       >
-        <span className="h-px w-14 bg-white/15" />
-        <p className="text-[0.62rem] tracking-[0.52em] text-silver-400 uppercase">
-          Something new is being written
-        </p>
+        <div className="pointer-events-auto w-[86vw]">
+          <AccordionGallery
+            items={GALLERY_ITEMS}
+            defaultIndex={2}
+            expandRatio={0.52}
+            trigger="hover"
+            accentColor="#006570"
+            overlayColor="#000000"
+            textColor="#ffffff"
+            grayscale
+            showLabels
+            duration={0.6}
+            ease="power3.out"
+            parallax={0.5}
+            tilt={8}
+            stagger={0.06}
+            height={galleryHeight}
+            gap={10}
+            radius={16}
+            orientation="horizontal"
+          />
+        </div>
       </div>
     </section>
   )
