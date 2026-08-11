@@ -1,8 +1,12 @@
+import { Link } from "react-router-dom"
 import ContactButton from "./ContactButton"
 
+// Items with `to` are real routes; items with `href` are placeholder
+// anchors until their section/page exists. Every nav item must resolve to
+// one or the other — never leave one dangling with neither.
 const NAV_LINKS = [
-  { label: "Home", href: "#home" },
-  { label: "About Me", href: "#about" },
+  { label: "Home", to: "/" },
+  { label: "About Me", to: "/about" },
   { label: "Writer", href: "#writer" },
   { label: "Animation", href: "#animation" },
   { label: "Campaigns", href: "#campaigns" },
@@ -10,23 +14,25 @@ const NAV_LINKS = [
   { label: "Workshops", href: "#workshops" },
 ]
 
+const LINK_CLASS =
+  "text-[0.7rem] tracking-[0.3em] text-silver-300 uppercase transition-colors duration-300 ease-out hover:text-silver-100"
+
 export default function Header() {
   return (
-    <header className="fixed inset-x-0 top-0 z-50 flex items-center justify-between bg-ink/35 px-[6vw] py-4 backdrop-blur-md">
-      <a href="#home" className="text-[0.78rem] tracking-[0.32em] text-silver-100 uppercase">
-        Nael Ahmad
-      </a>
-
+    <header className="fixed inset-x-0 top-0 z-50 flex items-center justify-end gap-16 bg-ink/35 px-[6vw] py-4 backdrop-blur-md">
       <nav>
-        <ul className="flex items-center gap-6">
-          {NAV_LINKS.map(({ label, href }) => (
+        <ul className="flex items-center gap-11">
+          {NAV_LINKS.map(({ label, to, href }) => (
             <li key={label}>
-              <a
-                href={href}
-                className="text-[0.7rem] tracking-[0.3em] text-silver-300 uppercase transition-colors duration-300 ease-out hover:text-silver-100"
-              >
-                {label}
-              </a>
+              {to ? (
+                <Link to={to} className={LINK_CLASS}>
+                  {label}
+                </Link>
+              ) : (
+                <a href={href} className={LINK_CLASS}>
+                  {label}
+                </a>
+              )}
             </li>
           ))}
         </ul>

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react"
+import { useLayoutEffect, useRef } from "react"
 import { gsap, prefersReducedMotion, ScrollTrigger } from "../lib/gsap"
 import { MARK_FOCUS } from "../lib/mark-76"
 import Mark76 from "./Mark76"
@@ -15,7 +15,7 @@ export default function PortalScene() {
   const backdrop = useRef<HTMLDivElement>(null)
   const inside = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const ctx = gsap.context((self) => {
       const q = self.selector!
 
