@@ -27,6 +27,7 @@ export default function PortalScene() {
   const scene = useRef<HTMLDivElement>(null)
   const stage = useRef<HTMLDivElement>(null)
   const mark = useRef<SVGSVGElement>(null)
+  const sinceLabel = useRef<HTMLParagraphElement>(null)
   const plate = useRef<HTMLDivElement>(null)
   const backdrop = useRef<HTMLDivElement>(null)
   const inside = useRef<HTMLDivElement>(null)
@@ -167,6 +168,15 @@ export default function PortalScene() {
         className="portal-plate pointer-events-none absolute top-1/2 left-1/2 z-20 size-[124vh] -translate-x-1/2 -translate-y-1/2 will-change-transform"
       />
       <div ref={backdrop} className="pointer-events-none absolute inset-0 z-20 bg-void opacity-0" />
+
+      {/* "Since", sitting over the gap the camera flies through. */}
+      <p
+        ref={sinceLabel}
+        data-approach
+        className="pointer-events-none absolute bottom-[calc(50%_+_23vh_+_1.25rem)] left-1/2 z-30 -translate-x-1/2 text-[2.5rem] tracking-[0.04em] whitespace-nowrap text-silver-400"
+      >
+        Since
+      </p>
 
       {/* Teal 99, masked out of a teal plate. */}
       <div
