@@ -111,6 +111,7 @@ export default function PortalScene() {
           },
         })
         .to(scene.current, { scale: 1.5, opacity: 0, ease: "power2.in", duration: 0.62 }, 0)
+        .to(sinceLabel.current, { scale: 1.08, opacity: 0, ease: "power2.in", duration: 0.45 }, 0)
         .to(plate.current, { scale: 22, duration: 1 }, 0)
         .to(mark.current, { scale: 30, duration: 1, force3D: false }, 0)
         // The teal surface slides out of the light as the camera passes it.
