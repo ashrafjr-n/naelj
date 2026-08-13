@@ -174,7 +174,7 @@ export default function PortalScene() {
       <p
         ref={sinceLabel}
         data-approach
-        className="pointer-events-none absolute bottom-[calc(50%_+_23vh_+_1.25rem)] left-1/2 z-30 -translate-x-[38vh] text-[2.15rem] tracking-[0.04em] whitespace-nowrap text-silver-400"
+        className="pointer-events-none absolute bottom-[calc(50%_+_23vh_+_1.25rem)] left-1/2 z-30 -translate-x-[38vh] text-[2.15rem] font-medium tracking-[0.04em] whitespace-nowrap text-silver-500"
       >
         Since
       </p>
