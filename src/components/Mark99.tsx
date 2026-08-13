@@ -1,10 +1,10 @@
 import type { Ref } from "react"
-import { MARK_PATH, MARK_VIEWBOX } from "../lib/mark-76"
+import { MARK_PATH, MARK_VIEWBOX } from "../lib/mark-99"
 
-// The 76 is never HTML text: a teal plate is painted through a mask cut to
+// The 99 is never HTML text: a teal plate is painted through a mask cut to
 // the digit shapes, so the counter stays transparent and reveals the dark
 // layer behind.
-export default function Mark76({ svgRef }: { svgRef: Ref<SVGSVGElement> }) {
+export default function Mark99({ svgRef }: { svgRef: Ref<SVGSVGElement> }) {
   const { width, height } = MARK_VIEWBOX
 
   return (
