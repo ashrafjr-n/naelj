@@ -57,9 +57,9 @@ export default function PortalScene() {
       const q = self.selector!
 
       // Every layer has to zoom about the same point in the scene — the gap
-      // between the 7 and the 6 — otherwise the move reads as a scale-up
-      // instead of a camera pushing forward. Origins are measured off
-      // layout, so they survive a resize.
+      // between the two 9s — otherwise the move reads as a scale-up instead
+      // of a camera pushing forward. Origins are measured off layout, so
+      // they survive a resize.
       const alignOrigins = () => {
         const box = stage.current
         if (!box) return
@@ -168,15 +168,15 @@ export default function PortalScene() {
       />
       <div ref={backdrop} className="pointer-events-none absolute inset-0 z-20 bg-void opacity-0" />
 
-      {/* Teal 76, masked out of a teal plate. */}
+      {/* Teal 99, masked out of a teal plate. */}
       <div
         ref={stage}
         className="pointer-events-none absolute top-1/2 left-1/2 z-30 aspect-[182/100] h-[46vh] -translate-x-1/2 -translate-y-1/2"
       >
-        <Mark76 svgRef={mark} />
+        <Mark99 svgRef={mark} />
       </div>
 
-      {/* Behind the 76 — what the camera arrives at. */}
+      {/* Behind the 99 — what the camera arrives at. */}
       <div
         ref={inside}
         className="pointer-events-none absolute inset-0 z-40 flex flex-col items-center justify-center opacity-0"
