@@ -170,11 +170,11 @@ export default function PortalScene() {
       />
       <div ref={backdrop} className="pointer-events-none absolute inset-0 z-20 bg-void opacity-0" />
 
-      {/* "Since", sitting over the gap the camera flies through. */}
+      {/* "Since", left-aligned above the mark to match the left 9's leading edge. */}
       <p
         ref={sinceLabel}
         data-approach
-        className="pointer-events-none absolute bottom-[calc(50%_+_23vh_+_1.25rem)] left-1/2 z-30 -translate-x-1/2 text-[2.5rem] tracking-[0.04em] whitespace-nowrap text-silver-400"
+        className="pointer-events-none absolute bottom-[calc(50%_+_23vh_+_1.25rem)] left-1/2 z-30 -translate-x-[41.86vh] text-[2.5rem] tracking-[0.04em] whitespace-nowrap text-silver-400"
       >
         Since
       </p>
