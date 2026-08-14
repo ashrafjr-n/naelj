@@ -4,19 +4,21 @@ import { MARK_FOCUS } from "../lib/mark-99"
 import Mark99 from "./Mark99"
 import AccordionGallery, { type AccordionGalleryItem } from "./AccordionGallery"
 import still from "../assets/images/nael-2.png"
-import writerImage from "../assets/images/writer.jpg"
-import campaignsImage from "../assets/images/campaigns.jpeg"
-import aiArtistImage from "../assets/images/ai.png"
-import workshopsImage from "../assets/images/workshops.jpg"
+import aboutMeImage from "../assets/images/pages-images/aboutme.jpeg"
+import writerImage from "../assets/images/pages-images/writer.jpeg"
+import animationPlaceholder from "../assets/images/pages-images/animation-placeholder.svg"
+import campaignsImage from "../assets/images/pages-images/campaigns.jpg"
+import aiArtistImage from "../assets/images/pages-images/ai.png"
+import workshopsImage from "../assets/images/pages-images/workshops.jpeg"
 
 const RAIL_BLOCKS = [132, 104, 156, 116, 140, 108, 128]
 
 // Mirrors Header.tsx's NAV_LINKS, minus "Home" — same labels, same targets.
-// About Me and Animation share the same portrait as the "on set" still below.
+// Animation has no photo yet — placeholder until one exists.
 const GALLERY_ITEMS: AccordionGalleryItem[] = [
-  { image: still, label: "About Me", link: "/about" },
+  { image: aboutMeImage, label: "About Me", link: "/about" },
   { image: writerImage, label: "Writer", link: "/#writer" },
-  { image: still, label: "Animation", link: "/#animation" },
+  { image: animationPlaceholder, label: "Animation", link: "/#animation" },
   { image: campaignsImage, label: "Campaigns", link: "/#campaigns" },
   { image: aiArtistImage, label: "AI Artist", link: "/#ai-artist" },
   { image: workshopsImage, label: "Workshops", link: "/#workshops" },
