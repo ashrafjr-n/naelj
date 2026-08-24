@@ -75,7 +75,7 @@ export default function Hero() {
   return (
     <section
       ref={root}
-      className="relative w-full bg-void pt-[calc(var(--header-h)+3rem)] pb-16 lg:h-screen lg:pt-[var(--header-h)] lg:pb-0"
+      className="relative w-full bg-void pt-[calc(var(--header-h)+3rem)] pb-6 lg:h-screen lg:pt-[var(--header-h)] lg:pb-0"
     >
       {/* Portrait — perfectly square, vertically centered on the copy block on desktop; a static block above the copy when stacked. */}
       <div
