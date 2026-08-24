@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef, useState } from "react"
 import { gsap, prefersReducedMotion, ScrollTrigger } from "../lib/gsap"
+import { useMediaQuery } from "../lib/useMediaQuery"
 import { MARK_FOCUS } from "../lib/mark-99"
 import Mark99 from "./Mark99"
 import AccordionGallery, { type AccordionGalleryItem } from "./AccordionGallery"
@@ -38,6 +39,9 @@ export default function PortalScene() {
   // the fixed header and breathing room, so it fills the section the same
   // way every other Home section fills its viewport.
   const [galleryHeight, setGalleryHeight] = useState(560)
+  // Hover-to-expand doesn't translate to touch — switch to tap-to-expand on
+  // devices with no real hover capability.
+  const isTouchDevice = useMediaQuery("(hover: none)")
 
   useLayoutEffect(() => {
     const section = root.current
@@ -168,23 +172,28 @@ export default function PortalScene() {
       {/* The dark layer the letterform opens into. */}
       <div
         ref={plate}
-        className="portal-plate pointer-events-none absolute top-1/2 left-1/2 z-20 size-[124vh] -translate-x-1/2 -translate-y-1/2 will-change-transform"
+        className="portal-plate pointer-events-none absolute top-1/2 left-1/2 z-20 size-[min(124vh,120vw)] -translate-x-1/2 -translate-y-1/2 will-change-transform"
       />
       <div ref={backdrop} className="pointer-events-none absolute inset-0 z-20 bg-void opacity-0" />
 
-      {/* "Since", left-aligned above the mark to match the left 9's leading edge. */}
+      {/* "Since", left-aligned above the mark to match the left 9's leading edge.
+          Offsets are proportional to the mark's own h-[min(46vh,44vw)] sizing
+          below (half-height, and half-width minus a small margin) so the two
+          stay aligned instead of the label overflowing narrow viewports. */}
       <p
         ref={sinceLabel}
         data-approach
-        className="pointer-events-none absolute bottom-[calc(50%_+_23vh_+_1.25rem)] left-1/2 z-30 -translate-x-[38vh] text-[2.15rem] font-medium tracking-[0.04em] whitespace-nowrap text-silver-500"
+        className="pointer-events-none absolute bottom-[calc(50%_+_min(23vh,22vw)_+_1.25rem)] left-1/2 z-30 -translate-x-[min(38vh,36vw)] text-[clamp(1.3rem,4.5vw,2.15rem)] font-medium tracking-[0.04em] whitespace-nowrap text-silver-500"
       >
         Since
       </p>
 
-      {/* Teal 99, masked out of a teal plate. */}
+      {/* Teal 99, masked out of a teal plate. Height is bounded by both vh and
+          vw so the mark (and its aspect-locked width) never overflows a
+          narrow/portrait viewport the way a pure vh size would. */}
       <div
         ref={stage}
-        className="pointer-events-none absolute top-1/2 left-1/2 z-30 aspect-[182/100] h-[46vh] -translate-x-1/2 -translate-y-1/2"
+        className="pointer-events-none absolute top-1/2 left-1/2 z-30 aspect-[182/100] h-[min(46vh,44vw)] -translate-x-1/2 -translate-y-1/2"
       >
         <Mark99 svgRef={mark} />
       </div>
@@ -199,7 +208,7 @@ export default function PortalScene() {
             items={GALLERY_ITEMS}
             defaultIndex={2}
             expandRatio={0.52}
-            trigger="hover"
+            trigger={isTouchDevice ? "click" : "hover"}
             accentColor="#006570"
             overlayColor="#000000"
             textColor="#ffffff"
