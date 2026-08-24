@@ -39,49 +39,48 @@ export default function Header() {
 
       <button
         type="button"
-        onClick={() => setOpen(true)}
-        aria-label="Open menu"
+        onClick={() => setOpen((v) => !v)}
+        aria-label={open ? "Close menu" : "Open menu"}
+        aria-expanded={open}
         className="text-silver-200 transition-colors duration-300 ease-out hover:text-teal lg:hidden"
       >
-        <Menu size={22} strokeWidth={1.5} />
+        {open ? <X size={22} strokeWidth={1.5} /> : <Menu size={22} strokeWidth={1.5} />}
       </button>
 
-      <div className="hidden lg:block">
-        <ContactButton />
-      </div>
+      <ContactButton className="lg:hidden" />
 
       {open && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-ink/97 backdrop-blur-md lg:hidden">
-          <div className="flex items-center justify-end px-[6vw] py-4">
-            <button
-              type="button"
-              onClick={() => setOpen(false)}
-              aria-label="Close menu"
-              className="text-silver-200 transition-colors duration-300 ease-out hover:text-teal"
-            >
-              <X size={22} strokeWidth={1.5} />
-            </button>
-          </div>
+        <>
+          {/* Transparent tap-out target — closes the panel without a full-screen scrim. */}
+          <button
+            type="button"
+            onClick={() => setOpen(false)}
+            aria-label="Close menu"
+            tabIndex={-1}
+            className="fixed inset-0 z-40 cursor-default lg:hidden"
+          />
 
-          <nav className="flex flex-1 flex-col items-center justify-center gap-8">
-            <ul className="flex flex-col items-center gap-8">
+          <nav className="absolute top-[calc(100%_+_0.5rem)] left-[6vw] z-50 w-48 rounded-2xl border border-white/10 bg-ink/35 py-3 shadow-2xl shadow-black/40 backdrop-blur-md lg:hidden">
+            <ul className="flex flex-col">
               {NAV_LINKS.map(({ label, to }) => (
                 <li key={label}>
                   <Link
                     to={to}
                     onClick={() => setOpen(false)}
-                    className="text-[1rem] tracking-[0.3em] text-silver-200 uppercase transition-colors duration-300 ease-out hover:text-teal"
+                    className="block px-5 py-2.5 text-[0.7rem] tracking-[0.28em] text-silver-200 uppercase transition-colors duration-300 ease-out hover:text-teal"
                   >
                     {label}
                   </Link>
                 </li>
               ))}
             </ul>
-
-            <ContactButton className="mt-4" />
           </nav>
-        </div>
+        </>
       )}
+
+      <div className="hidden lg:block">
+        <ContactButton />
+      </div>
     </header>
   )
 }
