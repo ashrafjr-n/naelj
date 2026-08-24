@@ -94,12 +94,12 @@ export default function AboutMe() {
   return (
     <div ref={root} className="pt-[var(--header-h)]">
       {/* Intro */}
-      <section className="px-[8vw] pt-24 pb-20">
+      <section className="px-[8vw] pt-16 pb-16 md:pt-24 md:pb-20">
         <p data-intro-fade className="text-[0.62rem] tracking-[0.5em] text-teal uppercase">
           Since 1999
         </p>
 
-        <h1 className="mt-7 font-sans text-[clamp(3rem,6vw,6rem)] tracking-[-0.022em] leading-[1.05]">
+        <h1 className="mt-7 font-sans text-[clamp(2.4rem,10vw,6rem)] tracking-[-0.022em] leading-[1.05]">
           <span data-line className="block overflow-hidden">
             <span className="block bg-gradient-to-b from-silver-200 via-silver-300 to-silver-500 bg-clip-text text-transparent">
               Nael Al-Jarabah
@@ -129,10 +129,12 @@ export default function AboutMe() {
           <section
             key={section.title}
             data-section
-            className="border-t border-white/10 px-[8vw] py-16"
+            className="border-t border-white/10 px-[8vw] py-12 md:py-16"
           >
-            <div className={`flex gap-16 ${reversed ? "flex-row-reverse text-right" : ""}`}>
-              <div className="w-[30%] shrink-0">
+            <div
+              className={`flex flex-col gap-6 md:flex-row md:gap-16 ${reversed ? "md:flex-row-reverse md:text-right" : ""}`}
+            >
+              <div className="shrink-0 md:w-[30%]">
                 <span className="text-[0.62rem] tracking-[0.4em] text-silver-500">
                   {section.index}
                 </span>
@@ -148,11 +150,11 @@ export default function AboutMe() {
                 <p className="text-[0.92rem] leading-[1.9] text-silver-300">{section.body}</p>
 
                 {section.items && (
-                  <ul className={`mt-7 flex flex-col gap-3 ${reversed ? "items-end" : ""}`}>
+                  <ul className={`mt-7 flex flex-col gap-3 ${reversed ? "md:items-end" : ""}`}>
                     {section.items.map((item) => (
                       <li
                         key={item}
-                        className={`flex items-baseline gap-3 text-[0.84rem] leading-[1.7] text-silver-400 ${reversed ? "flex-row-reverse" : ""}`}
+                        className={`flex items-baseline gap-3 text-[0.84rem] leading-[1.7] text-silver-400 ${reversed ? "md:flex-row-reverse" : ""}`}
                       >
                         <span className="size-1 shrink-0 rounded-full bg-teal" />
                         {item}
