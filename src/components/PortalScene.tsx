@@ -145,7 +145,7 @@ export default function PortalScene() {
         {/* Second portrait — desaturated down into the same darkness. */}
         <div
           data-approach
-          className="mask-still absolute bottom-0 -left-[5vw] w-[32vw] opacity-[0.72]"
+          className="mask-still absolute bottom-[30%] -left-[5vw] w-[32vw] opacity-[0.72] lg:bottom-0"
         >
           <img
             src={still}
@@ -157,7 +157,7 @@ export default function PortalScene() {
         {/* Works rail — placeholder blocks, fading out toward the top. */}
         <div
           data-approach
-          className="mask-rail absolute -top-[18vh] right-[7vw] flex h-[118vh] w-[19vw] flex-col justify-center gap-4"
+          className="mask-rail absolute -top-[2vh] right-[7vw] flex h-[55vh] w-[19vw] flex-col justify-center gap-4 lg:-top-[18vh] lg:h-[118vh]"
         >
           {RAIL_BLOCKS.map((height, i) => (
             <div
