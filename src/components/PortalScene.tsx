@@ -139,7 +139,7 @@ export default function PortalScene() {
   return (
     <section
       ref={root}
-      className="relative h-[75vh] w-full overflow-hidden bg-void pt-[var(--header-h)] lg:h-screen"
+      className="relative h-screen w-full overflow-hidden bg-void pt-[var(--header-h)]"
     >
       <div ref={scene} className="absolute inset-0 z-10 will-change-transform">
         {/* Second portrait — desaturated down into the same darkness. */}
@@ -169,10 +169,11 @@ export default function PortalScene() {
         </div>
       </div>
 
-      {/* The dark layer the letterform opens into. The section itself runs
-          shorter below lg (h-[75vh] vs. desktop's full h-screen), and this
-          sits higher than dead center within it — otherwise a much smaller
-          (mobile-sized) mark reads as far away from the section above it. */}
+      {/* The dark layer the letterform opens into. Section stays h-screen at
+          every breakpoint — shrinking a *pinned* ScrollTrigger's own height
+          (tried once, reverted) leaves the unpinned remainder of the
+          viewport showing blank void below it during the pin. Compactness
+          on mobile comes from sitting higher than dead center instead. */}
       <div
         ref={plate}
         className="portal-plate pointer-events-none absolute top-[36%] left-1/2 z-20 size-[min(124vh,120vw)] -translate-x-1/2 -translate-y-1/2 will-change-transform lg:top-1/2"
