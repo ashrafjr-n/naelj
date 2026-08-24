@@ -175,7 +175,7 @@ export default function PortalScene() {
           gap under the section above it. */}
       <div
         ref={plate}
-        className="portal-plate pointer-events-none absolute top-[38%] left-1/2 z-20 size-[min(124vh,120vw)] -translate-x-1/2 -translate-y-1/2 will-change-transform lg:top-1/2"
+        className="portal-plate pointer-events-none absolute top-[28%] left-1/2 z-20 size-[min(124vh,120vw)] -translate-x-1/2 -translate-y-1/2 will-change-transform lg:top-1/2"
       />
       <div ref={backdrop} className="pointer-events-none absolute inset-0 z-20 bg-void opacity-0" />
 
@@ -199,7 +199,7 @@ export default function PortalScene() {
           narrow/portrait viewport the way a pure vh size would. */}
       <div
         ref={stage}
-        className="pointer-events-none absolute top-[38%] left-1/2 z-30 aspect-[182/100] h-[min(46vh,44vw)] -translate-x-1/2 -translate-y-1/2 lg:top-1/2"
+        className="pointer-events-none absolute top-[28%] left-1/2 z-30 aspect-[182/100] h-[min(46vh,44vw)] -translate-x-1/2 -translate-y-1/2 lg:top-1/2"
       >
         <Mark99 svgRef={mark} />
       </div>
