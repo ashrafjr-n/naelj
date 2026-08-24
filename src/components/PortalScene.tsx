@@ -183,13 +183,13 @@ export default function PortalScene() {
           Offsets are proportional to the mark's own h-[min(46vh,44vw)] sizing
           below (half-height, and half-width minus a small margin) so the two
           stay aligned instead of the label overflowing narrow viewports. The
-          bottom anchor (62%/50%) mirrors the plate/stage's top anchor
-          (38%/50%) so the label keeps sitting the same distance above the
+          bottom anchor (72%/50%) mirrors the plate/stage's top anchor
+          (28%/50%) so the label keeps sitting the same distance above the
           mark at both. */}
       <p
         ref={sinceLabel}
         data-approach
-        className="pointer-events-none absolute bottom-[calc(62%_+_min(23vh,22vw)_+_1.25rem)] left-1/2 z-30 -translate-x-[min(38vh,36vw)] text-[clamp(1.3rem,4.5vw,2.15rem)] font-medium tracking-[0.04em] whitespace-nowrap text-silver-500 lg:bottom-[calc(50%_+_min(23vh,22vw)_+_1.25rem)]"
+        className="pointer-events-none absolute bottom-[calc(72%_+_min(23vh,22vw)_+_1.25rem)] left-1/2 z-30 -translate-x-[min(38vh,36vw)] text-[clamp(1.3rem,4.5vw,2.15rem)] font-medium tracking-[0.04em] whitespace-nowrap text-silver-500 lg:bottom-[calc(50%_+_min(23vh,22vw)_+_1.25rem)]"
       >
         Since
       </p>
