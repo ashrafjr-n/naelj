@@ -176,7 +176,7 @@ export default function PortalScene() {
           on mobile comes from sitting higher than dead center instead. */}
       <div
         ref={plate}
-        className="portal-plate pointer-events-none absolute top-[36%] left-1/2 z-20 size-[min(124vh,120vw)] -translate-x-1/2 -translate-y-1/2 will-change-transform lg:top-1/2"
+        className="portal-plate pointer-events-none absolute top-[32%] left-1/2 z-20 size-[min(124vh,120vw)] -translate-x-1/2 -translate-y-1/2 will-change-transform lg:top-1/2"
       />
       <div ref={backdrop} className="pointer-events-none absolute inset-0 z-20 bg-void opacity-0" />
 
@@ -184,13 +184,13 @@ export default function PortalScene() {
           Offsets are proportional to the mark's own h-[min(46vh,44vw)] sizing
           below (half-height, and half-width minus a small margin) so the two
           stay aligned instead of the label overflowing narrow viewports. The
-          bottom anchor (64%/50%) mirrors the plate/stage's top anchor
-          (36%/50%) so the label keeps sitting the same distance above the
+          bottom anchor (68%/50%) mirrors the plate/stage's top anchor
+          (32%/50%) so the label keeps sitting the same distance above the
           mark at both. */}
       <p
         ref={sinceLabel}
         data-approach
-        className="pointer-events-none absolute bottom-[calc(64%_+_min(23vh,22vw)_+_1.25rem)] left-1/2 z-30 -translate-x-[min(38vh,36vw)] text-[clamp(1.3rem,4.5vw,2.15rem)] font-medium tracking-[0.04em] whitespace-nowrap text-silver-500 lg:bottom-[calc(50%_+_min(23vh,22vw)_+_1.25rem)]"
+        className="pointer-events-none absolute bottom-[calc(68%_+_min(23vh,22vw)_+_1.25rem)] left-1/2 z-30 -translate-x-[min(38vh,36vw)] text-[clamp(1.3rem,4.5vw,2.15rem)] font-medium tracking-[0.04em] whitespace-nowrap text-silver-500 lg:bottom-[calc(50%_+_min(23vh,22vw)_+_1.25rem)]"
       >
         Since
       </p>
@@ -200,7 +200,7 @@ export default function PortalScene() {
           narrow/portrait viewport the way a pure vh size would. */}
       <div
         ref={stage}
-        className="pointer-events-none absolute top-[36%] left-1/2 z-30 aspect-[182/100] h-[min(46vh,44vw)] -translate-x-1/2 -translate-y-1/2 lg:top-1/2"
+        className="pointer-events-none absolute top-[32%] left-1/2 z-30 aspect-[182/100] h-[min(46vh,44vw)] -translate-x-1/2 -translate-y-1/2 lg:top-1/2"
       >
         <Mark99 svgRef={mark} />
       </div>
