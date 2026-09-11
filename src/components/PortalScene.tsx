@@ -22,7 +22,6 @@ import omanLogo from "../assets/nael-work-with/oman.png"
 import omantvLogo from "../assets/nael-work-with/omantv.png"
 import waarLogo from "../assets/nael-work-with/waar.png"
 
-// Two rail columns, each duplicated so a translateY(-50%) loop is seamless.
 const RAIL_COLUMN_A = [
   { src: agbLogo, alt: "AGB" },
   { src: aljazeeraLogo, alt: "Al Jazeera" },
@@ -37,6 +36,15 @@ const RAIL_COLUMN_B = [
   { src: omantvLogo, alt: "Oman TV" },
   { src: waarLogo, alt: "Waar TV" },
 ]
+
+// A rail column loops via translateY(-50%), so it needs to render two equal
+// halves back to back. Each half is the logo list repeated enough times to
+// outrun the tallest rail (lg:h-118vh) — short content would leave blank
+// void below it before the loop point, reading as a gap/stutter.
+const railLoop = (logos: typeof RAIL_COLUMN_A) => {
+  const half = Array.from({ length: 5 }, () => logos).flat()
+  return [...half, ...half]
+}
 
 // Mirrors Header.tsx's NAV_LINKS, minus "Home" — same labels, same targets.
 // Animation has no photo yet — placeholder until one exists.
@@ -185,7 +193,7 @@ export default function PortalScene() {
           className="mask-rail absolute -top-[2vh] right-[7vw] flex h-[55vh] w-[19vw] gap-4 overflow-hidden lg:-top-[18vh] lg:h-[118vh]"
         >
           <div className="rail-scroll-down flex w-1/2 shrink-0 flex-col gap-8">
-            {[...RAIL_COLUMN_A, ...RAIL_COLUMN_A].map((logo, i) => (
+            {railLoop(RAIL_COLUMN_A).map((logo, i) => (
               <img
                 key={i}
                 src={logo.src}
@@ -195,7 +203,7 @@ export default function PortalScene() {
             ))}
           </div>
           <div className="rail-scroll-up flex w-1/2 shrink-0 flex-col gap-8">
-            {[...RAIL_COLUMN_B, ...RAIL_COLUMN_B].map((logo, i) => (
+            {railLoop(RAIL_COLUMN_B).map((logo, i) => (
               <img
                 key={i}
                 src={logo.src}
