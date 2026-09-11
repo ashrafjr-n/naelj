@@ -24,3 +24,4 @@ The dev server runs at http://localhost:5173.
 - `npm run build` — type-check and build for production
 - `npm run preview` — preview the production build locally
 - `npm run lint` — lint the source with oxlint
+<!-- NV1 -->
