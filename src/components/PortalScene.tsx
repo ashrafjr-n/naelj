@@ -157,8 +157,8 @@ export default function PortalScene() {
         .to(backdrop.current, { opacity: 1, ease: "none", duration: 0.3 }, 0.5)
         .fromTo(
           inside.current,
-          { opacity: 0, scale: 0.94 },
-          { opacity: 1, scale: 1, ease: "power2.out", duration: 0.18 },
+          { opacity: 0, scale: 0.94, pointerEvents: "none" },
+          { opacity: 1, scale: 1, ease: "power2.out", duration: 0.18, pointerEvents: "auto" },
           0.82,
         )
 
@@ -250,7 +250,7 @@ export default function PortalScene() {
         ref={inside}
         className="pointer-events-none absolute inset-0 z-40 flex flex-col items-center justify-center opacity-0"
       >
-        <div className="pointer-events-auto w-[86vw]">
+        <div className="w-[86vw]">
           <AccordionGallery
             items={GALLERY_ITEMS}
             defaultIndex={2}
