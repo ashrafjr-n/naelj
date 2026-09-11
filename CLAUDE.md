@@ -26,6 +26,7 @@ src/pages/            page components (Home, AboutMe)
 src/components/       section + presentational components, incl. Layout (shared chrome: Ambience + Header, wraps routed pages via <Outlet />)
 src/lib/              non-component helpers (gsap setup, N geometry, useMediaQuery)
 src/assets/images/    portraits imported by components
+src/assets/nael-work-with/  company/channel logos, imported by PortalScene's works rail
 public/               static files served as-is
 vite.config.ts         Vite config (react + tailwindcss plugins)
 ```
