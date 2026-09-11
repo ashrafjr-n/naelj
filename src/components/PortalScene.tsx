@@ -11,8 +11,32 @@ import animationPlaceholder from "../assets/images/pages-images/animation-placeh
 import campaignsImage from "../assets/images/pages-images/campaigns.jpg"
 import aiArtistImage from "../assets/images/pages-images/ai.png"
 import workshopsImage from "../assets/images/pages-images/workshops.jpeg"
+import agbLogo from "../assets/nael-work-with/agb-logo.png"
+import aljazeeraLogo from "../assets/nael-work-with/aljazeera.png"
+import bara3emLogo from "../assets/nael-work-with/bara3em.png"
+import belestankLogo from "../assets/nael-work-with/belestank.png"
+import edenicLogo from "../assets/nael-work-with/edenic.png"
+import jordantvLogo from "../assets/nael-work-with/jordantv.png"
+import karameeshLogo from "../assets/nael-work-with/karameesh.png"
+import omanLogo from "../assets/nael-work-with/oman.png"
+import omantvLogo from "../assets/nael-work-with/omantv.png"
+import waarLogo from "../assets/nael-work-with/waar.png"
 
-const RAIL_BLOCKS = [132, 104, 156, 116, 140, 108, 128]
+// Two rail columns, each duplicated so a translateY(-50%) loop is seamless.
+const RAIL_COLUMN_A = [
+  { src: agbLogo, alt: "AGB" },
+  { src: aljazeeraLogo, alt: "Al Jazeera" },
+  { src: bara3emLogo, alt: "Bara3em" },
+  { src: belestankLogo, alt: "Belestank" },
+  { src: edenicLogo, alt: "Edenic" },
+]
+const RAIL_COLUMN_B = [
+  { src: jordantvLogo, alt: "Jordan TV" },
+  { src: karameeshLogo, alt: "Karameesh" },
+  { src: omanLogo, alt: "Oman" },
+  { src: omantvLogo, alt: "Oman TV" },
+  { src: waarLogo, alt: "Waar TV" },
+]
 
 // Mirrors Header.tsx's NAV_LINKS, minus "Home" — same labels, same targets.
 // Animation has no photo yet — placeholder until one exists.
@@ -154,18 +178,32 @@ export default function PortalScene() {
           />
         </div>
 
-        {/* Works rail — placeholder blocks, fading out toward the top. */}
+        {/* Works rail — two logo strips scrolling opposite directions, fading
+            out toward the top. */}
         <div
           data-approach
-          className="mask-rail absolute -top-[2vh] right-[7vw] flex h-[55vh] w-[19vw] flex-col justify-center gap-4 lg:-top-[18vh] lg:h-[118vh]"
+          className="mask-rail absolute -top-[2vh] right-[7vw] flex h-[55vh] w-[19vw] gap-4 overflow-hidden lg:-top-[18vh] lg:h-[118vh]"
         >
-          {RAIL_BLOCKS.map((height, i) => (
-            <div
-              key={i}
-              style={{ height }}
-              className="w-full shrink-0 border border-white/[0.06] bg-gradient-to-br from-white/[0.028] via-white/[0.008] to-transparent"
-            />
-          ))}
+          <div className="rail-scroll-down flex w-1/2 shrink-0 flex-col gap-8">
+            {[...RAIL_COLUMN_A, ...RAIL_COLUMN_A].map((logo, i) => (
+              <img
+                key={i}
+                src={logo.src}
+                alt={logo.alt}
+                className="logo-silver h-14 w-full shrink-0 object-contain"
+              />
+            ))}
+          </div>
+          <div className="rail-scroll-up flex w-1/2 shrink-0 flex-col gap-8">
+            {[...RAIL_COLUMN_B, ...RAIL_COLUMN_B].map((logo, i) => (
+              <img
+                key={i}
+                src={logo.src}
+                alt={logo.alt}
+                className="logo-silver h-14 w-full shrink-0 object-contain"
+              />
+            ))}
+          </div>
         </div>
       </div>
 
