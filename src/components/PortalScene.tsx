@@ -192,24 +192,18 @@ export default function PortalScene() {
           data-approach
           className="mask-rail absolute -top-[2vh] right-[7vw] flex h-[55vh] w-[19vw] gap-4 overflow-hidden lg:-top-[18vh] lg:h-[118vh]"
         >
-          <div className="rail-scroll-down flex w-1/2 shrink-0 flex-col gap-8">
+          <div className="rail-scroll-down flex w-1/2 shrink-0 flex-col">
             {railLoop(RAIL_COLUMN_A).map((logo, i) => (
-              <img
-                key={i}
-                src={logo.src}
-                alt={logo.alt}
-                className="logo-silver h-14 w-full shrink-0 object-contain"
-              />
+              <div key={i} className="flex h-24 shrink-0 items-center justify-center">
+                <img src={logo.src} alt={logo.alt} className="logo-silver h-14 w-full object-contain" />
+              </div>
             ))}
           </div>
-          <div className="rail-scroll-up flex w-1/2 shrink-0 flex-col gap-8">
+          <div className="rail-scroll-up flex w-1/2 shrink-0 flex-col">
             {railLoop(RAIL_COLUMN_B).map((logo, i) => (
-              <img
-                key={i}
-                src={logo.src}
-                alt={logo.alt}
-                className="logo-silver h-14 w-full shrink-0 object-contain"
-              />
+              <div key={i} className="flex h-24 shrink-0 items-center justify-center">
+                <img src={logo.src} alt={logo.alt} className="logo-silver h-14 w-full object-contain" />
+              </div>
             ))}
           </div>
         </div>
