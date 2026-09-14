@@ -72,12 +72,12 @@ const RailStrip = ({ logos, className }: { logos: typeof RAIL_COLUMN_A; classNam
 
 // Mirrors Header.tsx's NAV_LINKS, minus "Home" — same labels, same targets.
 const GALLERY_ITEMS: AccordionGalleryItem[] = [
-  { image: aboutMeImage, label: "About Me", link: "/about" },
-  { image: writerImage, label: "Writer", link: "/#writer" },
-  { image: animationImage, label: "Animation", link: "/#animation" },
-  { image: campaignsImage, label: "Campaigns", link: "/#campaigns" },
-  { image: aiArtistImage, label: "AI Artist", link: "/#ai-artist" },
-  { image: workshopsImage, label: "Workshops", link: "/#workshops" },
+  { image: aboutMeImage, label: "About Me", link: "/about", focus: "50% 30%" },
+  { image: writerImage, label: "Writer", link: "/#writer", focus: "50% 30%" },
+  { image: animationImage, label: "Animation", link: "/#animation", focus: "50% 55%" },
+  { image: campaignsImage, label: "Campaigns", link: "/#campaigns", focus: "50% 38%" },
+  { image: aiArtistImage, label: "AI Artist", link: "/#ai-artist", focus: "50% 24%" },
+  { image: workshopsImage, label: "Workshops", link: "/#workshops", focus: "50% 40%" },
 ]
 
 export default function PortalScene() {
@@ -90,13 +90,15 @@ export default function PortalScene() {
   const backdrop = useRef<HTMLDivElement>(null)
   const inside = useRef<HTMLDivElement>(null)
 
-  // Gallery height tracks the section's own rendered height (h-svh) minus
-  // the fixed header and breathing room, so it fills the section the same
-  // way every other Home section fills its viewport.
-  const [galleryHeight, setGalleryHeight] = useState(560)
   // Hover-to-expand doesn't translate to touch — devices with no real hover
   // get a static stack of equal cards instead.
   const isTouchDevice = useMediaQuery("(hover: none)")
+  // Gallery height tracks the section's own rendered height (h-svh) minus
+  // the fixed header and breathing room, so it fills the section the same
+  // way every other Home section fills its viewport. The touch stack of six
+  // cards needs the room more than the margin — short phones cut one off.
+  const [galleryHeight, setGalleryHeight] = useState(560)
+  const galleryBreathing = isTouchDevice ? 48 : 120
 
   useLayoutEffect(() => {
     const section = root.current
@@ -105,14 +107,14 @@ export default function PortalScene() {
     const measure = () => {
       const headerH =
         parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--header-h")) || 0
-      setGalleryHeight(Math.max(320, section.clientHeight - headerH - 120))
+      setGalleryHeight(Math.max(320, section.clientHeight - headerH - galleryBreathing))
     }
 
     measure()
     const ro = new ResizeObserver(measure)
     ro.observe(section)
     return () => ro.disconnect()
-  }, [])
+  }, [galleryBreathing])
 
   useLayoutEffect(() => {
     // Phones scroll on a separate thread from the pinned timeline, so the pin
@@ -393,7 +395,7 @@ export default function PortalScene() {
       {/* Behind the 99 — what the camera arrives at. */}
       <div
         ref={inside}
-        className="pointer-events-none absolute inset-0 z-40 flex flex-col items-center justify-center opacity-0"
+        className={`pointer-events-none absolute inset-0 z-40 flex flex-col items-center justify-center opacity-0 ${isTouchDevice ? "pt-[var(--header-h)]" : ""}`}
       >
         <div className="w-[86vw]">
           <AccordionGallery

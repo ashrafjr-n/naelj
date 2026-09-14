@@ -8,6 +8,8 @@ export interface AccordionGalleryItem {
   label?: string
   link?: string
   alt?: string
+  // object-position for the short, wide static (touch) cards, so the crop keeps faces/subject.
+  focus?: string
 }
 
 export interface AccordionGalleryProps {
@@ -218,7 +220,7 @@ export default function AccordionGallery({
             ref={(el: HTMLElement | null) => {
               panelRefs.current[i] = el
             }}
-            className="group relative block min-w-0 min-h-0 flex-[1_1_0] cursor-pointer overflow-hidden bg-[#0a0713] no-underline outline-none [transform-style:preserve-3d] [transform-origin:center] [box-shadow:0_10px_30px_-18px_rgba(0,0,0,0.8)] focus-visible:[box-shadow:0_0_0_2px_var(--ag-accent),0_10px_30px_-18px_rgba(0,0,0,0.8)] max-[520px]:min-h-[84px] max-[520px]:!transform-none"
+            className={`group relative block min-w-0 min-h-0 flex-[1_1_0] cursor-pointer overflow-hidden bg-[#0a0713] no-underline outline-none [transform-style:preserve-3d] [transform-origin:center] [box-shadow:0_10px_30px_-18px_rgba(0,0,0,0.8)] focus-visible:[box-shadow:0_0_0_2px_var(--ag-accent),0_10px_30px_-18px_rgba(0,0,0,0.8)] max-[520px]:!transform-none ${isStatic ? "" : "max-[520px]:min-h-[84px]"}`}
             style={
               {
                 borderRadius: `${radius}px`,
@@ -255,6 +257,7 @@ export default function AccordionGallery({
                   loading="lazy"
                   decoding="async"
                   className="block h-full w-full select-none object-cover [-webkit-user-drag:none]"
+                  style={isStatic && item.focus ? { objectPosition: item.focus } : undefined}
                 />
               </span>
               <span
