@@ -46,8 +46,13 @@ const railLoop = (logos: typeof RAIL_COLUMN_A) => {
   return [...half, ...half]
 }
 
+// Scroll-velocity rail boost: +1× resting speed per RAIL_BOOST_PX px/s of
+// scroll, capped at RAIL_BOOST_MAX extra.
+const RAIL_BOOST_PX = 140
+const RAIL_BOOST_MAX = 12
+
 const RailStrip = ({ logos, className }: { logos: typeof RAIL_COLUMN_A; className: string }) => (
-  <div className={`flex shrink-0 ${className}`}>
+  <div data-rail-strip className={`flex shrink-0 ${className}`}>
     {railLoop(logos).map((logo, i) => (
       <div key={i} className="flex h-20 w-28 shrink-0 items-center justify-center lg:h-24 lg:w-full">
         <img
@@ -149,12 +154,32 @@ export default function PortalScene() {
         end: "top top",
       }
 
+      // The rails are CSS animations; their playback rate is eased toward a
+      // velocity-scaled target (updatePlaybackRate keeps position continuous,
+      // so speeding up never jumps the loop).
+      const railSpeed = { rate: 1 }
+      const applyRailRate = () => {
+        for (const strip of q("[data-rail-strip]") as HTMLElement[]) {
+          for (const anim of strip.getAnimations()) anim.updatePlaybackRate(railSpeed.rate)
+        }
+      }
+      const toRailRate = gsap.quickTo(railSpeed, "rate", {
+        duration: 0.5,
+        ease: "power3.out",
+        onUpdate: applyRailRate,
+      })
+      const settleRails = gsap.delayedCall(0.15, () => toRailRate(1)).pause()
+      const boostRails = (velocity: number) => {
+        toRailRate(1 + Math.min(Math.abs(velocity) / RAIL_BOOST_PX, RAIL_BOOST_MAX))
+        settleRails.restart(true)
+      }
+
       // Approach: the desktop side pieces settle into place as the section arrives.
       gsap.from(q("[data-approach]"), {
         yPercent: 9,
         opacity: 0.15,
         ease: "none",
-        scrollTrigger: { ...approach, scrub: true },
+        scrollTrigger: { ...approach, scrub: true, onUpdate: (self) => boostRails(self.getVelocity()) },
       })
 
       // Entrance: the 99 rises out of a hairline, then "Since", then (mobile)
@@ -215,6 +240,9 @@ export default function PortalScene() {
             // nothing to anticipate — pinning early there reads as a jump.
             anticipatePin: ScrollTrigger.isTouch === 1 ? 0 : 1,
             scrub: 0.6,
+            // Rails speed up with scroll velocity, then ease back to their
+            // resting drift once scrolling stops.
+            onUpdate: (self) => boostRails(self.getVelocity()),
           },
         })
         .to(scene.current, { scale: 1.5, opacity: 0, ease: "power2.in", duration: 0.62 }, 0)
