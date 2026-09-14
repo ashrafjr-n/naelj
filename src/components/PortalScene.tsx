@@ -50,6 +50,9 @@ const railLoop = (logos: typeof RAIL_COLUMN_A) => {
 // scroll, capped at RAIL_BOOST_MAX extra.
 const RAIL_BOOST_PX = 140
 const RAIL_BOOST_MAX = 12
+// Scrolling less than this share of the push-through away from where it last
+// rested snaps back; more completes the move.
+const SNAP_NUDGE = 0.12
 
 const RailStrip = ({ logos, className }: { logos: typeof RAIL_COLUMN_A; className: string }) => (
   <div data-rail-strip className={`flex shrink-0 ${className}`}>
@@ -114,9 +117,11 @@ export default function PortalScene() {
   useLayoutEffect(() => {
     // Phones scroll on a separate thread from the pinned timeline, so the pin
     // jitters/jumps and the address bar resizes the viewport mid-pin. Taking
-    // touch scroll onto the main thread keeps both in lockstep.
+    // touch scroll onto the main thread keeps both in lockstep. Its default
+    // 2.8s momentum tail creeps so long that the scroll assist (which waits
+    // for scrolling to stop) lagged ~2s behind the finger; 1.4s still glides.
     const isTouch = ScrollTrigger.isTouch === 1
-    if (isTouch) ScrollTrigger.normalizeScroll(true)
+    if (isTouch) ScrollTrigger.normalizeScroll({ momentum: 1.4 })
 
     const ctx = gsap.context((self) => {
       const q = self.selector!
@@ -227,6 +232,9 @@ export default function PortalScene() {
         .from(q("[data-rail-row='a']"), { xPercent: 35, opacity: 0, ease: "power3.out", duration: 0.5 }, 0.58)
         .from(q("[data-rail-row='b']"), { xPercent: -35, opacity: 0, ease: "power3.out", duration: 0.5 }, 0.64)
 
+      // Which end of the push-through the scroll last rested at (0 = the 99, 1 = gallery).
+      let snapRest = 0
+
       // Push through: scrubbed to scroll, pinned so the camera keeps moving.
       gsap
         .timeline({
@@ -240,9 +248,27 @@ export default function PortalScene() {
             // nothing to anticipate — pinning early there reads as a jump.
             anticipatePin: ScrollTrigger.isTouch === 1 ? 0 : 1,
             scrub: 0.6,
+            // Scroll assist between the 99 and the gallery: a small nudge away
+            // from where it last rested (judged on the real position, not the
+            // momentum-predicted one, so one wheel tick can't launch it)
+            // settles back; past that, the move completes. Never fires
+            // outside the pin.
+            snap: {
+              snapTo: (_natural, self) => {
+                const progress = self?.progress ?? snapRest
+                return Math.abs(progress - snapRest) > SNAP_NUDGE ? 1 - snapRest : snapRest
+              },
+              duration: { min: 0.5, max: 1.1 },
+              delay: 0.15,
+              ease: "power2.inOut",
+            },
             // Rails speed up with scroll velocity, then ease back to their
             // resting drift once scrolling stops.
-            onUpdate: (self) => boostRails(self.getVelocity()),
+            onUpdate: (self) => {
+              boostRails(self.getVelocity())
+              if (self.progress <= 0.001) snapRest = 0
+              else if (self.progress >= 0.999) snapRest = 1
+            },
           },
         })
         .to(scene.current, { scale: 1.5, opacity: 0, ease: "power2.in", duration: 0.62 }, 0)
