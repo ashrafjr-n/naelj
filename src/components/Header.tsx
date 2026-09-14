@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import { Menu, X } from "lucide-react"
 import ContactButton from "./ContactButton"
 
@@ -22,14 +22,22 @@ const LINK_CLASS =
 
 export default function Header() {
   const [open, setOpen] = useState(false)
+  const { pathname } = useLocation()
+
+  // Navigating to "/" from another page already lands at the top (Layout),
+  // but a same-route Link does nothing — so on Home, "Home" scrolls up itself.
+  const onNavClick = (to: string) => {
+    setOpen(false)
+    if (to === "/" && pathname === "/") window.scrollTo({ top: 0, behavior: "smooth" })
+  }
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 flex items-center justify-between bg-ink/35 px-[6vw] py-4 backdrop-blur-md">
       <nav className="hidden lg:block">
-        <ul className="flex items-center gap-11">
+        <ul className="flex items-center gap-11 xl:gap-14">
           {NAV_LINKS.map(({ label, to }) => (
             <li key={label}>
-              <Link to={to} className={LINK_CLASS}>
+              <Link to={to} onClick={() => onNavClick(to)} className={LINK_CLASS}>
                 {label}
               </Link>
             </li>
@@ -66,7 +74,7 @@ export default function Header() {
                 <li key={label}>
                   <Link
                     to={to}
-                    onClick={() => setOpen(false)}
+                    onClick={() => onNavClick(to)}
                     className="block px-5 py-2.5 text-[0.7rem] tracking-[0.28em] text-silver-200 uppercase transition-colors duration-300 ease-out hover:text-teal"
                   >
                     {label}

@@ -7,7 +7,7 @@ import AccordionGallery, { type AccordionGalleryItem } from "./AccordionGallery"
 import still from "../assets/images/nael-2.png"
 import aboutMeImage from "../assets/images/pages-images/aboutme.jpeg"
 import writerImage from "../assets/images/pages-images/writer.jpeg"
-import animationPlaceholder from "../assets/images/pages-images/animation-placeholder.svg"
+import animationImage from "../assets/images/pages-images/animation.png"
 import campaignsImage from "../assets/images/pages-images/campaigns.jpg"
 import aiArtistImage from "../assets/images/pages-images/ai.png"
 import workshopsImage from "../assets/images/pages-images/workshops.jpeg"
@@ -37,21 +37,30 @@ const RAIL_COLUMN_B = [
   { src: waarLogo, alt: "Waar TV" },
 ]
 
-// A rail column loops via translateY(-50%), so it needs to render two equal
-// halves back to back. Each half is the logo list repeated enough times to
-// outrun the tallest rail (lg:h-118vh) — short content would leave blank
-// void below it before the loop point, reading as a gap/stutter.
+// A rail strip loops via translate(-50%), so it renders two equal halves back
+// to back. Each half repeats the logo list enough to outrun the longest rail.
+// The strip must size to its content (h-max / w-max): if flex stretches it to
+// the rail's box instead, -50% no longer equals one half and the loop jumps.
 const railLoop = (logos: typeof RAIL_COLUMN_A) => {
   const half = Array.from({ length: 5 }, () => logos).flat()
   return [...half, ...half]
 }
 
+const RailStrip = ({ logos, className }: { logos: typeof RAIL_COLUMN_A; className: string }) => (
+  <div className={`flex shrink-0 ${className}`}>
+    {railLoop(logos).map((logo, i) => (
+      <div key={i} className="flex h-20 w-28 shrink-0 items-center justify-center lg:h-24 lg:w-full">
+        <img src={logo.src} alt={logo.alt} className="logo-silver h-14 w-full object-contain" />
+      </div>
+    ))}
+  </div>
+)
+
 // Mirrors Header.tsx's NAV_LINKS, minus "Home" — same labels, same targets.
-// Animation has no photo yet — placeholder until one exists.
 const GALLERY_ITEMS: AccordionGalleryItem[] = [
   { image: aboutMeImage, label: "About Me", link: "/about" },
   { image: writerImage, label: "Writer", link: "/#writer" },
-  { image: animationPlaceholder, label: "Animation", link: "/#animation" },
+  { image: animationImage, label: "Animation", link: "/#animation" },
   { image: campaignsImage, label: "Campaigns", link: "/#campaigns" },
   { image: aiArtistImage, label: "AI Artist", link: "/#ai-artist" },
   { image: workshopsImage, label: "Workshops", link: "/#workshops" },
@@ -67,12 +76,12 @@ export default function PortalScene() {
   const backdrop = useRef<HTMLDivElement>(null)
   const inside = useRef<HTMLDivElement>(null)
 
-  // Gallery height tracks the section's own rendered height (h-screen) minus
+  // Gallery height tracks the section's own rendered height (h-svh) minus
   // the fixed header and breathing room, so it fills the section the same
   // way every other Home section fills its viewport.
   const [galleryHeight, setGalleryHeight] = useState(560)
-  // Hover-to-expand doesn't translate to touch — switch to tap-to-expand on
-  // devices with no real hover capability.
+  // Hover-to-expand doesn't translate to touch — devices with no real hover
+  // get a static stack of equal cards instead.
   const isTouchDevice = useMediaQuery("(hover: none)")
 
   useLayoutEffect(() => {
@@ -92,6 +101,12 @@ export default function PortalScene() {
   }, [])
 
   useLayoutEffect(() => {
+    // Phones scroll on a separate thread from the pinned timeline, so the pin
+    // jitters/jumps and the address bar resizes the viewport mid-pin. Taking
+    // touch scroll onto the main thread keeps both in lockstep.
+    const isTouch = ScrollTrigger.isTouch === 1
+    if (isTouch) ScrollTrigger.normalizeScroll(true)
+
     const ctx = gsap.context((self) => {
       const q = self.selector!
 
@@ -122,18 +137,64 @@ export default function PortalScene() {
 
       if (prefersReducedMotion()) return cleanup
 
-      // Approach: the scene settles into place as the section arrives.
+      const approach = {
+        trigger: root.current,
+        start: "top bottom",
+        end: "top top",
+      }
+
+      // Approach: the desktop side pieces settle into place as the section arrives.
       gsap.from(q("[data-approach]"), {
         yPercent: 9,
         opacity: 0.15,
         ease: "none",
-        scrollTrigger: {
-          trigger: root.current,
-          start: "top bottom",
-          end: "top top",
-          scrub: true,
-        },
+        scrollTrigger: { ...approach, scrub: true },
       })
+
+      // Entrance: the 99 rises out of a hairline, then "Since", then (mobile)
+      // the Work With label draws open and the two logo rows glide in from
+      // opposite sides. Only child wrappers are animated, never the elements
+      // the pinned push-through below also tweens, so the two never fight.
+      // The reveal is a feathered mask (a hard clip edge reads as the digits
+      // being cut), driven through a proxy so it's fully removed once
+      // revealed — any mask left on it would crop the mark's 30× zoom later.
+      // It's an inner wrapper, not the stage: GSAP folds the stage's
+      // -translate-1/2 centering into its own yPercent, which a y tween
+      // would overwrite.
+      const reveal = { p: 0 }
+      const stageEl = q("[data-stage-reveal]")[0] as HTMLElement
+      gsap
+        .timeline({ scrollTrigger: { ...approach, scrub: 1 } })
+        .fromTo(
+          stageEl,
+          { yPercent: 22, scale: 0.9, opacity: 0 },
+          { yPercent: 0, scale: 1, opacity: 1, ease: "power3.out", duration: 0.7 },
+          0,
+        )
+        .to(
+          reveal,
+          {
+            p: 1,
+            ease: "power2.out",
+            duration: 0.6,
+            onUpdate: () => {
+              const edge = -45 + reveal.p * 145
+              const mask = reveal.p < 1 ? `linear-gradient(to top, #000 ${edge}%, transparent ${edge + 45}%)` : ""
+              stageEl.style.maskImage = mask
+              stageEl.style.webkitMaskImage = mask
+            },
+          },
+          0,
+        )
+        .from(q("[data-since]"), { yPercent: 110, opacity: 0, ease: "power3.out", duration: 0.4 }, 0.35)
+        .from(q("[data-work-rule]"), { scaleX: 0, ease: "power2.out", duration: 0.4 }, 0.5)
+        .from(
+          q("[data-work-label]"),
+          { opacity: 0, letterSpacing: "0.9em", ease: "power2.out", duration: 0.45 },
+          0.5,
+        )
+        .from(q("[data-rail-row='a']"), { xPercent: 35, opacity: 0, ease: "power3.out", duration: 0.5 }, 0.58)
+        .from(q("[data-rail-row='b']"), { xPercent: -35, opacity: 0, ease: "power3.out", duration: 0.5 }, 0.64)
 
       // Push through: scrubbed to scroll, pinned so the camera keeps moving.
       gsap
@@ -144,7 +205,9 @@ export default function PortalScene() {
             start: "top top",
             end: "+=220%",
             pin: true,
-            anticipatePin: 1,
+            // Touch scroll is main-thread (normalizeScroll below), so there's
+            // nothing to anticipate — pinning early there reads as a jump.
+            anticipatePin: ScrollTrigger.isTouch === 1 ? 0 : 1,
             scrub: 0.6,
           },
         })
@@ -165,19 +228,22 @@ export default function PortalScene() {
       return cleanup
     }, root)
 
-    return () => ctx.revert()
+    return () => {
+      ctx.revert()
+      if (isTouch) ScrollTrigger.normalizeScroll(false)
+    }
   }, [])
 
   return (
     <section
       ref={root}
-      className="relative h-screen w-full overflow-hidden bg-void pt-[var(--header-h)]"
+      className="relative h-svh w-full overflow-hidden bg-void pt-[var(--header-h)]"
     >
       <div ref={scene} className="absolute inset-0 z-10 will-change-transform">
         {/* Second portrait — desaturated down into the same darkness. */}
         <div
           data-approach
-          className="mask-still absolute bottom-[30%] -left-[5vw] w-[32vw] opacity-[0.72] lg:bottom-0"
+          className="mask-still absolute bottom-0 -left-[5vw] hidden w-[32vw] opacity-[0.72] lg:block"
         >
           <img
             src={still}
@@ -186,33 +252,47 @@ export default function PortalScene() {
           />
         </div>
 
-        {/* Works rail — two logo strips scrolling opposite directions, fading
-            out toward the top. */}
+        {/* Works rail (desktop) — two vertical logo strips scrolling opposite
+            directions, fading out toward the top. */}
         <div
           data-approach
-          className="mask-rail absolute -top-[2vh] right-[7vw] flex h-[55vh] w-[19vw] gap-4 overflow-hidden lg:-top-[18vh] lg:h-[118vh]"
+          className="mask-rail absolute -top-[18vh] right-[7vw] hidden h-[118vh] w-[19vw] gap-4 overflow-hidden lg:flex"
         >
-          <div className="rail-scroll-down flex w-1/2 shrink-0 flex-col">
-            {railLoop(RAIL_COLUMN_A).map((logo, i) => (
-              <div key={i} className="flex h-24 shrink-0 items-center justify-center">
-                <img src={logo.src} alt={logo.alt} className="logo-silver h-14 w-full object-contain" />
-              </div>
-            ))}
+          <RailStrip logos={RAIL_COLUMN_A} className="rail-scroll-down h-max w-1/2 flex-col" />
+          <RailStrip logos={RAIL_COLUMN_B} className="rail-scroll-up h-max w-1/2 flex-col" />
+        </div>
+
+        {/* Mobile: spans from the 99's bottom edge (the stage's top-[32%]
+            anchor plus half its height) to the section bottom — the Work
+            With label centers in the gap, the two horizontal logo strips
+            sit along the bottom, feathered at both sides. */}
+        <div className="absolute inset-x-0 top-[calc(32%_+_min(23vh,22vw))] bottom-0 flex flex-col pb-[7vh] lg:hidden">
+          <div className="flex flex-1 items-center justify-center gap-4 pt-[8vh]">
+            <span data-work-rule className="h-px w-10 origin-right bg-white/20" />
+            <p
+              data-work-label
+              className="text-[0.66rem] tracking-[0.42em] whitespace-nowrap text-silver-400 uppercase"
+            >
+              Work With
+            </p>
+            <span data-work-rule className="h-px w-10 origin-left bg-white/20" />
           </div>
-          <div className="rail-scroll-up flex w-1/2 shrink-0 flex-col">
-            {railLoop(RAIL_COLUMN_B).map((logo, i) => (
-              <div key={i} className="flex h-24 shrink-0 items-center justify-center">
-                <img src={logo.src} alt={logo.alt} className="logo-silver h-14 w-full object-contain" />
-              </div>
-            ))}
+          <div className="mask-rail-x flex flex-col gap-2 overflow-hidden">
+            <div data-rail-row="a">
+              <RailStrip logos={RAIL_COLUMN_A} className="rail-scroll-left w-max" />
+            </div>
+            <div data-rail-row="b">
+              <RailStrip logos={RAIL_COLUMN_B} className="rail-scroll-right w-max" />
+            </div>
           </div>
         </div>
       </div>
 
-      {/* The dark layer the letterform opens into. Section stays h-screen at
-          every breakpoint — shrinking a *pinned* ScrollTrigger's own height
-          (tried once, reverted) leaves the unpinned remainder of the
-          viewport showing blank void below it during the pin. Compactness
+      {/* The dark layer the letterform opens into. Section stays a full
+          viewport tall at every breakpoint — shrinking a *pinned*
+          ScrollTrigger's own height (tried once, reverted) leaves the
+          unpinned remainder showing blank void below it during the pin. It
+          uses svh, not vh: a phone's 100vh runs under the browser toolbar. Compactness
           on mobile comes from sitting higher than dead center instead. */}
       <div
         ref={plate}
@@ -229,10 +309,11 @@ export default function PortalScene() {
           mark at both. */}
       <p
         ref={sinceLabel}
-        data-approach
-        className="pointer-events-none absolute bottom-[calc(68%_+_min(23vh,22vw)_+_1.25rem)] left-1/2 z-30 -translate-x-[min(38vh,36vw)] text-[clamp(1.3rem,4.5vw,2.15rem)] font-medium tracking-[0.04em] whitespace-nowrap text-silver-500 lg:bottom-[calc(50%_+_min(23vh,22vw)_+_1.25rem)]"
+        className="pointer-events-none absolute overflow-hidden bottom-[calc(68%_+_min(23vh,22vw)_+_1.25rem)] left-1/2 z-30 -translate-x-[min(38vh,36vw)] text-[clamp(1.3rem,4.5vw,2.15rem)] font-medium tracking-[0.04em] whitespace-nowrap text-silver-500 lg:bottom-[calc(50%_+_min(23vh,22vw)_+_1.25rem)]"
       >
-        Since
+        <span data-since className="inline-block">
+          Since
+        </span>
       </p>
 
       {/* Teal 99, masked out of a teal plate. Height is bounded by both vh and
@@ -242,7 +323,9 @@ export default function PortalScene() {
         ref={stage}
         className="pointer-events-none absolute top-[32%] left-1/2 z-30 aspect-[182/100] h-[min(46vh,44vw)] -translate-x-1/2 -translate-y-1/2 lg:top-1/2"
       >
-        <Mark99 svgRef={mark} />
+        <div data-stage-reveal className="absolute inset-0">
+          <Mark99 svgRef={mark} />
+        </div>
       </div>
 
       {/* Behind the 99 — what the camera arrives at. */}
@@ -255,7 +338,7 @@ export default function PortalScene() {
             items={GALLERY_ITEMS}
             defaultIndex={2}
             expandRatio={0.52}
-            trigger={isTouchDevice ? "click" : "hover"}
+            trigger={isTouchDevice ? "none" : "hover"}
             accentColor="#006570"
             overlayColor="#000000"
             textColor="#ffffff"

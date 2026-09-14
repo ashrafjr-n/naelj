@@ -8,42 +8,51 @@ export default function VideoHero() {
   const [inView, setInView] = useState(false)
   const [muted, setMuted] = useState(true)
 
-  // Lazy-load once the section is in or nearing the viewport, then keep the
-  // video (and its sound) paused while scrolled away and resumed on return.
+  // Two signals decide playback together: the section is in/near the viewport,
+  // and the section after it (the portrait) is under ~70% visible. Each
+  // observer only fires on its own threshold crossing, so both must re-sync
+  // from shared state — otherwise a pause from one is never undone when
+  // scrolling back up.
+  const nearViewport = useRef(false)
+  const nextCovers = useRef(false)
+
   useEffect(() => {
     const el = root.current
-    if (!el) return
+    const nextSection = el?.nextElementSibling
+    if (!el || !nextSection) return
 
-    const observer = new IntersectionObserver(
+    const sync = () => {
+      const v = video.current
+      if (!v) return
+      if (nearViewport.current && !nextCovers.current) {
+        if (v.paused) v.play().catch(() => {})
+      } else {
+        v.pause()
+      }
+    }
+
+    // Lazy-load once the section is in or nearing the viewport.
+    const sectionObserver = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true)
-          video.current?.play().catch(() => {})
-        } else {
-          video.current?.pause()
-        }
+        nearViewport.current = entry.isIntersecting
+        if (entry.isIntersecting) setInView(true)
+        sync()
       },
       { rootMargin: "200px 0px" },
     )
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [])
-
-  // Stop as soon as the section right after this one (the portrait section)
-  // is ~70% visible while scrolling into it — i.e. right around when the
-  // portrait itself appears — rather than partway through scrolling past it.
-  useEffect(() => {
-    const nextSection = root.current?.nextElementSibling as HTMLElement | null
-    if (!nextSection) return
-
-    const observer = new IntersectionObserver(
+    const nextObserver = new IntersectionObserver(
       ([entry]) => {
-        if (entry.intersectionRatio >= 0.7) video.current?.pause()
+        nextCovers.current = entry.intersectionRatio >= 0.7
+        sync()
       },
       { threshold: 0.7 },
     )
-    observer.observe(nextSection)
-    return () => observer.disconnect()
+    sectionObserver.observe(el)
+    nextObserver.observe(nextSection)
+    return () => {
+      sectionObserver.disconnect()
+      nextObserver.disconnect()
+    }
   }, [])
 
   // Browsers block autoplay-with-sound, so try unmuted first and fall back
@@ -51,7 +60,7 @@ export default function VideoHero() {
   useEffect(() => {
     if (!inView) return
     const v = video.current
-    if (!v) return
+    if (!v || nextCovers.current) return
 
     v.muted = false
     v.play()
@@ -96,6 +105,7 @@ export default function VideoHero() {
           src={heroVideo}
           loop
           playsInline
+          preload="auto"
           aria-hidden="true"
         />
       )}

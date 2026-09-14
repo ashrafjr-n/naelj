@@ -93,6 +93,7 @@ export default function AboutMe() {
 
   return (
     <div ref={root} className="pt-[var(--header-h)]">
+      <title>About — Nael Ahmad Al-Jarabah</title>
       {/* Intro */}
       <section className="px-[8vw] pt-16 pb-16 md:pt-24 md:pb-20">
         <p data-intro-fade className="text-[0.62rem] tracking-[0.5em] text-teal uppercase">

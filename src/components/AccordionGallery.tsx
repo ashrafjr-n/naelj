@@ -26,7 +26,8 @@ export interface AccordionGalleryProps {
   parallax?: number
   tilt?: number
   stagger?: number
-  trigger?: "hover" | "click"
+  // "none": no expand on interaction — equal cards, full-bleed images, labels always shown (touch).
+  trigger?: "hover" | "none"
   showLabels?: boolean
   grayscale?: boolean
   className?: string
@@ -70,7 +71,8 @@ export default function AccordionGallery({
   const firstRunRef = useRef(true)
   const mediaSizeRef = useRef(320)
 
-  const vertical = orientation === "vertical"
+  const isStatic = trigger === "none"
+  const vertical = isStatic || orientation === "vertical"
   const count = items.length
   const [active, setActive] = useState(Math.min(Math.max(defaultIndex, 0), count - 1))
 
@@ -96,15 +98,16 @@ export default function AccordionGallery({
 
       panels.forEach((panel, i) => {
         if (!panel) return
-        const isActive = i === active
+        const isActive = isStatic || i === active
         const media = mediaRefs.current[i]
         const bar = barRefs.current[i]
         const text = textRefs.current[i]
 
         const rot = isActive ? 0 : i < active ? tilt : -tilt
+        const grownFlex = isStatic ? 1 : grow
         const rotProp = vertical ? { rotateX: -rot } : { rotateY: rot }
 
-        tl.to(panel, { flexGrow: isActive ? grow : 1, ...rotProp, duration: dur, ease }, 0)
+        tl.to(panel, { flexGrow: isActive ? grownFlex : 1, ...rotProp, duration: dur, ease }, 0)
 
         if (media) {
           const drift = Math.max(-1.5, Math.min(1.5, active - i))
@@ -138,6 +141,7 @@ export default function AccordionGallery({
       tlRef.current = tl
     },
     [
+      isStatic,
       active,
       count,
       expandRatio,
@@ -190,7 +194,7 @@ export default function AccordionGallery({
   }
 
   const handleClick = (i: number, e: MouseEvent) => {
-    if (i !== active) {
+    if (!isStatic && i !== active) {
       e.preventDefault()
       setActive(i)
     }
@@ -210,7 +214,7 @@ export default function AccordionGallery({
     <div
       ref={rootRef}
       className={`flex ${vertical ? "flex-col" : "flex-row"} w-full max-w-full [perspective:1400px] max-[520px]:!flex-col max-[520px]:[perspective:none] ${className}`}
-      style={{ gap: `${gap}px`, height: vertical ? `${Math.round(height * 1.6)}px` : `${height}px` }}
+      style={{ gap: `${gap}px`, height: vertical && !isStatic ? `${Math.round(height * 1.6)}px` : `${height}px` }}
       role="list"
       aria-label="Image accordion gallery"
     >
@@ -237,11 +241,11 @@ export default function AccordionGallery({
             {...(item.link ? { to: item.link } : {})}
             onClick={(e: MouseEvent) => handleClick(i, e)}
             onMouseEnter={() => handleEnter(i)}
-            onFocus={() => setActive(i)}
+            onFocus={() => !isStatic && setActive(i)}
             onKeyDown={(e: KeyboardEvent) => handleKeyDown(i, e)}
             role="listitem"
             tabIndex={0}
-            aria-current={isActive ? "true" : undefined}
+            aria-current={!isStatic && isActive ? "true" : undefined}
             aria-label={item.label}
           >
             <span className="absolute inset-0 overflow-hidden [border-radius:inherit]">
@@ -252,7 +256,7 @@ export default function AccordionGallery({
                 className="absolute top-1/2 left-1/2 [filter:grayscale(var(--ag-gray,1))]"
                 style={{
                   width: vertical ? "100%" : "var(--ag-media-size, 320px)",
-                  height: vertical ? "var(--ag-media-size, 320px)" : "100%",
+                  height: isStatic ? "100%" : vertical ? "var(--ag-media-size, 320px)" : "100%",
                   willChange: "transform, filter",
                 }}
               >

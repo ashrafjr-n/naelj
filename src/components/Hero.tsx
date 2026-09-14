@@ -119,8 +119,12 @@ export default function Hero() {
             </p>
           </div>
 
-          <div data-fade className="mt-14 flex items-center justify-center gap-6 lg:justify-start">
-            <ContactButton href="mailto:hello@example.com" />
+          {/* Stacked below lg: social icons row on top, Contact centered beneath. */}
+          <div
+            data-fade
+            className="mt-14 flex flex-col-reverse items-center justify-center gap-6 lg:flex-row lg:justify-start"
+          >
+            <ContactButton />
             <SocialLinks />
           </div>
 

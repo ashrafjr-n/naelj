@@ -62,6 +62,24 @@
   }
 }
 
+@keyframes rail-scroll-left {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes rail-scroll-right {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
 @layer utilities {
   /* Film grain — keeps the flat black from reading as a flat CSS colour. */
   .grain {
@@ -111,18 +129,33 @@
     mix-blend-mode: screen;
   }
 
-  /* Works rail: two columns of logos looping opposite directions. Each
-     column's content is rendered twice, so a translateY of exactly one set's
-     height loops seamlessly. */
+  /* Mobile works rail: feathered at both sides instead of the top. */
+  .mask-rail-x {
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 18%, #000 82%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 18%, #000 82%, transparent 100%);
+  }
+
+  /* Works rail: strips of logos looping opposite directions. Each strip's
+     content is rendered twice, so translating by exactly half its (content-
+     sized) length loops seamlessly. Durations are tuned to the strip length
+     (2400px tall / 2800px wide) for a slow, steady drift. */
   .rail-scroll-down {
-    animation: rail-scroll-down 26s linear infinite;
+    animation: rail-scroll-down 120s linear infinite;
   }
   .rail-scroll-up {
-    animation: rail-scroll-up 26s linear infinite;
+    animation: rail-scroll-up 120s linear infinite;
+  }
+  .rail-scroll-left {
+    animation: rail-scroll-left 100s linear infinite;
+  }
+  .rail-scroll-right {
+    animation: rail-scroll-right 100s linear infinite;
   }
   @media (prefers-reduced-motion: reduce) {
     .rail-scroll-down,
-    .rail-scroll-up {
+    .rail-scroll-up,
+    .rail-scroll-left,
+    .rail-scroll-right {
       animation: none;
     }
   }

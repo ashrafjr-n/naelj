@@ -1,12 +1,13 @@
 import { Mail } from "lucide-react"
 import { SiFacebook, SiInstagram, SiWhatsapp } from "@icons-pack/react-simple-icons"
+import { CONTACT_EMAIL } from "../lib/contact"
 
 // Placeholder destinations — swap for the real profiles later.
 const LINKS = [
   { label: "WhatsApp", href: "https://wa.me/00000000000", Icon: SiWhatsapp },
   { label: "Facebook", href: "https://facebook.com/", Icon: SiFacebook },
   { label: "Instagram", href: "https://instagram.com/", Icon: SiInstagram },
-  { label: "Email", href: "mailto:hello@example.com", Icon: Mail },
+  { label: "Email", href: `mailto:${CONTACT_EMAIL}`, Icon: Mail },
 ]
 
 export default function SocialLinks() {

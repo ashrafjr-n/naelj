@@ -9,7 +9,63 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@200..600&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Paint the void before the CSS bundle arrives, so slow connections never flash white. -->
+    <style>
+      html,
+      body {
+        background: #000;
+      }
+    </style>
+
     <title>Nael Ahmad Al-Jarabah — Screenwriter &amp; Director</title>
+    <meta
+      name="description"
+      content="Nael Ahmad Al-Jarabah — screenwriter, director and executive producer since 1999. Theatre, film, television drama, animation and writing workshops across the Arab world."
+    />
+    <meta name="author" content="Nael Ahmad Al-Jarabah" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#000000" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-96.png" type="image/png" sizes="96x96" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Link previews (WhatsApp, Facebook, LinkedIn, X…) read these; the image must be an absolute URL. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Nael Ahmad Al-Jarabah" />
+    <meta property="og:title" content="Nael Ahmad Al-Jarabah — Screenwriter &amp; Director" />
+    <meta
+      property="og:description"
+      content="Screenwriter, director and executive producer since 1999 — theatre, film, television and animation."
+    />
+    <meta property="og:url" content="%VITE_SITE_URL%/" />
+    <meta property="og:image" content="%VITE_SITE_URL%/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Since 99 — Nael Ahmad Al-Jarabah, Screenwriter · Director" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Nael Ahmad Al-Jarabah — Screenwriter &amp; Director" />
+    <meta
+      name="twitter:description"
+      content="Screenwriter, director and executive producer since 1999 — theatre, film, television and animation."
+    />
+    <meta name="twitter:image" content="%VITE_SITE_URL%/og-image.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Nael Ahmad Al-Jarabah",
+        "alternateName": "Nael Al-Jarabah",
+        "jobTitle": ["Screenwriter", "Director", "Executive Producer"],
+        "description": "Screenwriter, director and executive producer since 1999 — theatre, film, television drama and animation across the Arab world.",
+        "url": "%VITE_SITE_URL%/",
+        "image": "%VITE_SITE_URL%/og-image.png"
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
