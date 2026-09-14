@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react"
 import { Volume2, VolumeX } from "lucide-react"
-import heroVideo from "../assets/videos/hero.webm"
+import heroWebm from "../assets/videos/hero.webm"
+import heroMp4 from "../assets/videos/hero.mp4"
+import heroPoster from "../assets/videos/hero-poster.webp"
 
 export default function VideoHero() {
   const root = useRef<HTMLElement>(null)
@@ -102,12 +104,16 @@ export default function VideoHero() {
         <video
           ref={video}
           className="absolute inset-0 size-full object-cover"
-          src={heroVideo}
+          poster={heroPoster}
           loop
           playsInline
           preload="auto"
           aria-hidden="true"
-        />
+        >
+          {/* WebM (VP9) is the lighter file; MP4 (H.264) covers browsers without VP9, e.g. older iOS Safari. */}
+          <source src={heroWebm} type="video/webm" />
+          <source src={heroMp4} type="video/mp4" />
+        </video>
       )}
       <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/70" />
 
