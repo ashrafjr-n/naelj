@@ -11,7 +11,7 @@ export interface AccordionGalleryItem {
 }
 
 export interface AccordionGalleryProps {
-  items?: AccordionGalleryItem[]
+  items: AccordionGalleryItem[]
   defaultIndex?: number
   accentColor?: string
   overlayColor?: string
@@ -20,7 +20,6 @@ export interface AccordionGalleryProps {
   gap?: number
   radius?: number
   expandRatio?: number
-  orientation?: "horizontal" | "vertical"
   duration?: number
   ease?: string
   parallax?: number
@@ -33,16 +32,8 @@ export interface AccordionGalleryProps {
   className?: string
 }
 
-const DEFAULT_ITEMS: AccordionGalleryItem[] = [
-  { image: "https://picsum.photos/id/1015/900/1200", label: "Canyon", link: "#" },
-  { image: "https://picsum.photos/id/1018/900/1200", label: "Ridgeline", link: "#" },
-  { image: "https://picsum.photos/id/1039/900/1200", label: "Falls", link: "#" },
-  { image: "https://picsum.photos/id/1043/900/1200", label: "Harbour", link: "#" },
-  { image: "https://picsum.photos/id/1044/900/1200", label: "Skyline", link: "#" },
-]
-
 export default function AccordionGallery({
-  items = DEFAULT_ITEMS,
+  items,
   defaultIndex = 2,
   accentColor = "#ffffff",
   overlayColor = "#060010",
@@ -51,7 +42,6 @@ export default function AccordionGallery({
   gap = 10,
   radius = 16,
   expandRatio = 0.52,
-  orientation = "horizontal",
   duration = 0.6,
   ease = "power3.out",
   parallax = 0.5,
@@ -72,7 +62,6 @@ export default function AccordionGallery({
   const mediaSizeRef = useRef(320)
 
   const isStatic = trigger === "none"
-  const vertical = isStatic || orientation === "vertical"
   const count = items.length
   const [active, setActive] = useState(Math.min(Math.max(defaultIndex, 0), count - 1))
 
@@ -105,7 +94,7 @@ export default function AccordionGallery({
 
         const rot = isActive ? 0 : i < active ? tilt : -tilt
         const grownFlex = isStatic ? 1 : grow
-        const rotProp = vertical ? { rotateX: -rot } : { rotateY: rot }
+        const rotProp = isStatic ? { rotateX: -rot } : { rotateY: rot }
 
         tl.to(panel, { flexGrow: isActive ? grownFlex : 1, ...rotProp, duration: dur, ease }, 0)
 
@@ -118,8 +107,8 @@ export default function AccordionGallery({
             {
               xPercent: -50,
               yPercent: -50,
-              x: vertical ? 0 : isActive ? 0 : shift,
-              y: vertical ? (isActive ? 0 : shift) : 0,
+              x: isStatic ? 0 : isActive ? 0 : shift,
+              y: isStatic ? (isActive ? 0 : shift) : 0,
               "--ag-gray": gray,
               "--ag-dim": isActive ? 0 : 0.35,
               duration: dur,
@@ -147,7 +136,6 @@ export default function AccordionGallery({
       expandRatio,
       duration,
       ease,
-      vertical,
       tilt,
       parallax,
       grayscale,
@@ -163,7 +151,7 @@ export default function AccordionGallery({
 
     const measure = () => {
       const rect = el.getBoundingClientRect()
-      const total = vertical ? rect.height : rect.width
+      const total = isStatic ? rect.height : rect.width
       const usable = Math.max(total - gap * (count - 1), 120)
       const size = Math.max(140, usable * Math.min(Math.max(expandRatio, 0.2), 0.9) * 1.22)
       mediaSizeRef.current = size
@@ -175,7 +163,7 @@ export default function AccordionGallery({
     const ro = new ResizeObserver(measure)
     ro.observe(el)
     return () => ro.disconnect()
-  }, [applyLayout, gap, count, expandRatio, vertical])
+  }, [applyLayout, gap, count, expandRatio, isStatic])
 
   useEffect(() => {
     applyLayout(!firstRunRef.current)
@@ -213,8 +201,8 @@ export default function AccordionGallery({
   return (
     <div
       ref={rootRef}
-      className={`flex ${vertical ? "flex-col" : "flex-row"} w-full max-w-full [perspective:1400px] max-[520px]:!flex-col max-[520px]:[perspective:none] ${className}`}
-      style={{ gap: `${gap}px`, height: vertical && !isStatic ? `${Math.round(height * 1.6)}px` : `${height}px` }}
+      className={`flex ${isStatic ? "flex-col" : "flex-row"} w-full max-w-full [perspective:1400px] max-[520px]:!flex-col max-[520px]:[perspective:none] ${className}`}
+      style={{ gap: `${gap}px`, height: `${height}px` }}
       role="list"
       aria-label="Image accordion gallery"
     >
@@ -255,8 +243,8 @@ export default function AccordionGallery({
                 }}
                 className="absolute top-1/2 left-1/2 [filter:grayscale(var(--ag-gray,1))]"
                 style={{
-                  width: vertical ? "100%" : "var(--ag-media-size, 320px)",
-                  height: isStatic ? "100%" : vertical ? "var(--ag-media-size, 320px)" : "100%",
+                  width: isStatic ? "100%" : "var(--ag-media-size, 320px)",
+                  height: "100%",
                   willChange: "transform, filter",
                 }}
               >

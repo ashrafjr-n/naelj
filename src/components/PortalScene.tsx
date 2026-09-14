@@ -352,7 +352,6 @@ export default function PortalScene() {
             height={galleryHeight}
             gap={10}
             radius={16}
-            orientation="horizontal"
           />
         </div>
       </div>
