@@ -4,23 +4,23 @@ import { useMediaQuery } from "../lib/useMediaQuery"
 import { MARK_FOCUS } from "../lib/mark-99"
 import Mark99 from "./Mark99"
 import AccordionGallery, { type AccordionGalleryItem } from "./AccordionGallery"
-import still from "../assets/images/nael-2.png"
-import aboutMeImage from "../assets/images/pages-images/aboutme.jpeg"
-import writerImage from "../assets/images/pages-images/writer.jpeg"
-import animationImage from "../assets/images/pages-images/animation.png"
-import campaignsImage from "../assets/images/pages-images/campaigns.jpg"
-import aiArtistImage from "../assets/images/pages-images/ai.png"
-import workshopsImage from "../assets/images/pages-images/workshops.jpeg"
-import agbLogo from "../assets/nael-work-with/agb-logo.png"
-import aljazeeraLogo from "../assets/nael-work-with/aljazeera.png"
-import bara3emLogo from "../assets/nael-work-with/bara3em.png"
-import belestankLogo from "../assets/nael-work-with/belestank.png"
-import edenicLogo from "../assets/nael-work-with/edenic.png"
-import jordantvLogo from "../assets/nael-work-with/jordantv.png"
-import karameeshLogo from "../assets/nael-work-with/karameesh.png"
-import omanLogo from "../assets/nael-work-with/oman.png"
-import omantvLogo from "../assets/nael-work-with/omantv.png"
-import waarLogo from "../assets/nael-work-with/waar.png"
+import still from "../assets/images/nael-2.webp"
+import aboutMeImage from "../assets/images/pages-images/aboutme.webp"
+import writerImage from "../assets/images/pages-images/writer.webp"
+import animationImage from "../assets/images/pages-images/animation.webp"
+import campaignsImage from "../assets/images/pages-images/campaigns.webp"
+import aiArtistImage from "../assets/images/pages-images/ai.webp"
+import workshopsImage from "../assets/images/pages-images/workshops.webp"
+import agbLogo from "../assets/nael-work-with/agb-logo.webp"
+import aljazeeraLogo from "../assets/nael-work-with/aljazeera.webp"
+import bara3emLogo from "../assets/nael-work-with/bara3em.webp"
+import belestankLogo from "../assets/nael-work-with/belestank.webp"
+import edenicLogo from "../assets/nael-work-with/edenic.webp"
+import jordantvLogo from "../assets/nael-work-with/jordantv.webp"
+import karameeshLogo from "../assets/nael-work-with/karameesh.webp"
+import omanLogo from "../assets/nael-work-with/oman.webp"
+import omantvLogo from "../assets/nael-work-with/omantv.webp"
+import waarLogo from "../assets/nael-work-with/waar.webp"
 
 const RAIL_COLUMN_A = [
   { src: agbLogo, alt: "AGB" },
@@ -50,7 +50,13 @@ const RailStrip = ({ logos, className }: { logos: typeof RAIL_COLUMN_A; classNam
   <div className={`flex shrink-0 ${className}`}>
     {railLoop(logos).map((logo, i) => (
       <div key={i} className="flex h-20 w-28 shrink-0 items-center justify-center lg:h-24 lg:w-full">
-        <img src={logo.src} alt={logo.alt} className="logo-silver h-14 w-full object-contain" />
+        <img
+          src={logo.src}
+          alt={logo.alt}
+          loading="lazy"
+          decoding="async"
+          className="logo-silver h-14 w-full object-contain"
+        />
       </div>
     ))}
   </div>
@@ -248,6 +254,8 @@ export default function PortalScene() {
           <img
             src={still}
             alt="Nael Ahmad Al-Jarabah on set"
+            loading="lazy"
+            decoding="async"
             className="size-full object-cover brightness-[0.52] grayscale-[0.92] contrast-[1.12]"
           />
         </div>

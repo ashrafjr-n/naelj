@@ -252,6 +252,8 @@ export default function AccordionGallery({
                   src={item.image}
                   alt={item.alt || item.label || ""}
                   draggable={false}
+                  loading="lazy"
+                  decoding="async"
                   className="block h-full w-full select-none object-cover [-webkit-user-drag:none]"
                 />
               </span>

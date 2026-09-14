@@ -3,7 +3,7 @@ import { gsap, prefersReducedMotion } from "../lib/gsap"
 import { useMediaQuery } from "../lib/useMediaQuery"
 import ContactButton from "./ContactButton"
 import SocialLinks from "./SocialLinks"
-import portrait from "../assets/images/nael.png"
+import portrait from "../assets/images/nael.webp"
 
 // Short factual details shown under the contact row — append more here later.
 const EXPERIENCE_DETAILS = ["Experience since 1999."]
@@ -86,6 +86,8 @@ export default function Hero() {
         <img
           src={portrait}
           alt="Nael Ahmad Al-Jarabah"
+          loading="lazy"
+          decoding="async"
           className="size-full object-cover object-[54%_center] contrast-[1.04] saturate-[0.82]"
         />
         {/* Soft seam separating the portrait from the text column — depth, not a hard edge. */}
